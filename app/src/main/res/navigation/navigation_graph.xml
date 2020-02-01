@@ -9,5 +9,14 @@
         android:id="@+id/labelsFragment"
         android:name="to.freebots.todobutler.fragments.LabelsFragment"
         android:label="fragment_labels"
-        tools:layout="@layout/fragment_labels" />
+        tools:layout="@layout/fragment_labels" >
+        <action
+            android:id="@+id/action_labelsFragment_to_tasksFromLabelFragment"
+            app:destination="@id/tasksFromLabelFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksFromLabelFragment"
+        android:name="to.freebots.todobutler.fragments.TasksFromLabelFragment"
+        android:label="fragment_tasks_from_label"
+        tools:layout="@layout/fragment_tasks_from_label" />
 </navigation>

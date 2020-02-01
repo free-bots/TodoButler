@@ -1,11 +1,13 @@
 package to.freebots.todobutler.fragments
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
@@ -40,10 +42,38 @@ class LabelsFragment : Fragment() {
             Label("Todo")
         )
 
+        labelsAdapter.action = object : LabelsAdapter.Action {
+            override fun edit(label: Label) {
+                Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
+                showInfoOfLabel(label)
+            }
+
+            override fun open(label: Label) {
+                Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
+                this@LabelsFragment.findNavController()
+                    .navigate(
+                        R.id.action_labelsFragment_to_tasksFromLabelFragment
+                    )
+            }
+        }
+
         rv_label.adapter = labelsAdapter
 
         addLabelFab.setOnClickListener {
-            Snackbar.make(it, "Todo",Snackbar.LENGTH_LONG).show()
+            Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
+            showInfoOfLabel(Label("new"))
         }
+    }
+
+    private fun showInfoOfLabel(label: Label) {
+        AlertDialog.Builder(context)
+            .setTitle("TODO")
+            .setView(R.layout.layout_label_info)
+            .setCancelable(true)
+            .setMessage("TODO")
+            .setNegativeButton("TODO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

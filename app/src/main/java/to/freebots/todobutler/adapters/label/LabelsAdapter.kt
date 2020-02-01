@@ -6,17 +6,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import to.freebots.todobutler.R
 import to.freebots.todobutler.models.entities.Label
 
-class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>() {
+class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>(), View.OnLongClickListener,
+    View.OnClickListener {
+
+    var action: Action? = null
 
     var labels: List<Label> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    private var recyclerView: RecyclerView? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LabelHolder {
         return LabelHolder(
@@ -27,6 +31,7 @@ class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>() {
             )
         ).apply {
             setIsRecyclable(false)
+            setListener(this@LabelsAdapter, this@LabelsAdapter)
         }
     }
 
@@ -36,14 +41,7 @@ class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>() {
 
     override fun onBindViewHolder(holder: LabelHolder, position: Int) {
         holder.bind(
-            labels[position].name,
-            View.OnClickListener {
-                Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
-            },
-            View.OnLongClickListener {
-                Snackbar.make(it, "Todo",Snackbar.LENGTH_LONG).show()
-                true
-            }
+            labels[position].name
         )
     }
 
@@ -52,15 +50,55 @@ class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>() {
         var icon: ImageView = itemView.findViewById(R.id.icon)
         var name: TextView = itemView.findViewById(R.id.name)
 
-        fun bind(
-            name: String,
+        fun setListener(
             clickListener: View.OnClickListener,
             longClickListener: View.OnLongClickListener
         ) {
-            this.name.text = name
-            this.icon.setImageResource(R.drawable.ic_add_24px)
             itemView.setOnClickListener(clickListener)
             itemView.setOnLongClickListener(longClickListener)
         }
+
+        fun bind(
+            name: String
+        ) {
+            this.name.text = name
+            this.icon.setImageResource(R.drawable.ic_add_24px)
+        }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        action?.let { action ->
+            handleClickedLabel(v)?.let { label ->
+                action.edit(label)
+            }
+            return true
+        }
+        return false
+    }
+
+    override fun onClick(v: View?) {
+        action?.let { action ->
+            handleClickedLabel(v)?.let { label ->
+                action.open(label)
+            }
+        }
+    }
+
+    private fun handleClickedLabel(view: View?): Label? {
+        return view?.let { view ->
+            recyclerView?.let {
+                labels[it.getChildAdapterPosition(view)]
+            }
+        }
+    }
+
+    interface Action {
+        fun edit(label: Label)
+        fun open(label: Label)
     }
 }
