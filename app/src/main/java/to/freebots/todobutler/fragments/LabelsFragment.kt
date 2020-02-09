@@ -1,11 +1,11 @@
 package to.freebots.todobutler.fragments
 
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +18,7 @@ import to.freebots.todobutler.models.entities.Label
 /**
  * [Fragment] for browse and editing labels.
  */
-class LabelsFragment : Fragment() {
+class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,14 +66,14 @@ class LabelsFragment : Fragment() {
     }
 
     private fun showInfoOfLabel(label: Label) {
-        AlertDialog.Builder(context)
-            .setTitle("TODO")
-            .setView(R.layout.layout_label_info)
-            .setCancelable(true)
-            .setMessage("TODO")
-            .setNegativeButton("TODO") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+        this.activity?.supportFragmentManager?.let {
+            LabelDialogFragment
+                .instance(label, this)
+                .show(it, "label")
+        }
+    }
+
+    override fun labelInfo(label: Label) {
+        Toast.makeText(context, label.name, Toast.LENGTH_LONG).show()
     }
 }

@@ -6,19 +6,27 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        android:id="@+id/textView"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Label info" />
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/labelIconIV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher_background"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <com.google.android.material.textfield.TextInputEditText
+    <EditText
+        android:id="@+id/labelNameET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
-
-    </com.google.android.material.textfield.TextInputEditText>
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
 
 
 </LinearLayout>

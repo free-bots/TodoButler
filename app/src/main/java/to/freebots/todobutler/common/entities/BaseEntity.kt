@@ -7,7 +7,7 @@ import java.util.*
 @Entity
 abstract class BaseEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    var id: Long,
     var createdAt: Date? = null,
     var updatedAt: Date? = null
 ) {
