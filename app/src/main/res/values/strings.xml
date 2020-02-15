@@ -6,4 +6,5 @@
 
     <!-- add -->
     <string name="add_label">label</string>
+    <string name="add_task">task</string>
 </resources>
