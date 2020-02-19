@@ -27,5 +27,9 @@
         android:id="@+id/taskFragment"
         android:name="to.freebots.todobutler.fragments.TaskFragment"
         android:label="fragment_task"
-        tools:layout="@layout/fragment_task" />
+        tools:layout="@layout/fragment_task" >
+        <action
+            android:id="@+id/action_taskFragment_self"
+            app:destination="@id/taskFragment" />
+    </fragment>
 </navigation>

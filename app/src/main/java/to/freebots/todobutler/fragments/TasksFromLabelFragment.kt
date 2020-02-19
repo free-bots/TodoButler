@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks_from_label.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
+import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
-import to.freebots.todobutler.models.entities.Label
 
 /**
  * [Fragment] to show Task assigned to the label.
@@ -32,44 +32,7 @@ class TasksFromLabelFragment : Fragment() {
 
         var tasksAdapter = TasksAdapter()
 
-        var tasks: MutableList<FlatTaskDTO> = mutableListOf(
-            FlatTaskDTO(
-                Label("label name"),
-                null,
-                "name",
-                "desc",
-                false,
-                mutableListOf(),
-                mutableListOf()
-            ),
-            FlatTaskDTO(
-                Label("label name"),
-                null,
-                "name",
-                "desc",
-                false,
-                mutableListOf(),
-                mutableListOf()
-            ),
-            FlatTaskDTO(
-                Label("label name"),
-                null,
-                "name",
-                "desc",
-                false,
-                mutableListOf(),
-                mutableListOf()
-            ),
-            FlatTaskDTO(
-                Label("label name"),
-                null,
-                "name",
-                "desc",
-                false,
-                mutableListOf(),
-                mutableListOf()
-            )
-        )
+        var tasks: MutableList<FlatTaskDTO> = Mock.listOfFlatTaskDTO
 
         tasksAdapter.tasks = tasks
 
@@ -79,7 +42,12 @@ class TasksFromLabelFragment : Fragment() {
             }
 
             override fun open(flatTaskDTO: FlatTaskDTO) {
-                findNavController().navigate(R.id.action_tasksFromLabelFragment_to_taskFragment)
+                val bundle = Bundle()
+                bundle.putParcelable("flatTaskDTO", flatTaskDTO)
+                findNavController().navigate(
+                    R.id.action_tasksFromLabelFragment_to_taskFragment,
+                    bundle
+                )
             }
         }
 

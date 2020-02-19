@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.LabelsAdapter
+import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
 
 /**
@@ -32,15 +33,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         super.onViewCreated(view, savedInstanceState)
         val labelsAdapter = LabelsAdapter()
 
-        labelsAdapter.labels = listOf(
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo")
-        )
+        labelsAdapter.labels = Mock.listOfLabels
 
         labelsAdapter.action = object : LabelsAdapter.Action {
             override fun edit(label: Label) {
