@@ -42,8 +42,9 @@ class TasksFromLabelFragment : Fragment() {
             }
 
             override fun open(flatTaskDTO: FlatTaskDTO) {
-                val bundle = Bundle()
-                bundle.putParcelable("flatTaskDTO", flatTaskDTO)
+                val bundle = Bundle().apply {
+                    putParcelable("flatTaskDTO", flatTaskDTO)
+                }
                 findNavController().navigate(
                     R.id.action_tasksFromLabelFragment_to_taskFragment,
                     bundle
@@ -53,6 +54,14 @@ class TasksFromLabelFragment : Fragment() {
 
         rv_tasks.adapter = tasksAdapter
 
-        addTaskFab.setOnClickListener { }
+        addTaskFab.setOnClickListener {
+            val bundle = Bundle().apply {
+                putParcelable("flatTaskDTO", Mock.flatTaskDTOWithSubTask)
+            }
+            findNavController().navigate(
+                R.id.action_tasksFromLabelFragment_to_taskFragment,
+                bundle
+            )
+        }
     }
 }

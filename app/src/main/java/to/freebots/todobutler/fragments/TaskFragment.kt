@@ -4,14 +4,20 @@ package to.freebots.todobutler.fragments
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.JsonWriter
 import android.view.*
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_task.*
+import org.json.JSONObject
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.common.mock.Mock
@@ -59,6 +65,15 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 findNavController().navigate(R.id.action_taskFragment_self, bundle)
                 return true
             }
+            R.id.menu_clone -> {
+                // TODO create a copy of the current task
+                arguments?.let {
+                    it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                        cloneTask(flatTaskDTO)
+                    }
+                }
+                return true
+            }
             else -> {
                 println("no menu id")
                 return false
@@ -83,13 +98,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             }
         }
 
-        tv_date.setOnClickListener { v ->
-            DatePickerDialog(context!!, this, 2020, 2, 19).show()
-        }
-
-        tv_time.setOnClickListener { v ->
-            TimePickerDialog(context!!, this, 24, 21, true).show()
-        }
+        applyListeners()
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {
@@ -97,12 +106,35 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         et_name.setText(flatTaskDTO.name)
         et_desc.setText(flatTaskDTO.description)
 
+        sw_completed.isChecked = flatTaskDTO.isCompleted
+
         showSubTasks(flatTaskDTO.subTasks)
+    }
+
+    private fun applyListeners() {
+
+        tv_date.setOnClickListener { v ->
+            DatePickerDialog(context!!, this, 2020, 2, 19).show()
+        }
+
+        tv_time.setOnClickListener { v ->
+            TimePickerDialog(context!!, this, 24, 21, true).show()
+        }
+
+        sw_completed.setOnCheckedChangeListener { buttonView, isChecked ->
+
+        }
+
+        et_name.doOnTextChanged { text, start, count, after ->
+
+        }
+
+        et_desc.doOnTextChanged { text, start, count, after -> }
     }
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
 
-        if (inflatedView == null) {
+        if (subTasks.isEmpty().not()) {
             inflatedView = vs_sub_tasks.inflate()
         }
 
@@ -112,6 +144,18 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 tasks = subTasks
             }
         }
+    }
+
+    private fun cloneTask(flatTaskDTO: FlatTaskDTO) {
+        val json = Gson().toJson(FlatTaskDTO)
+        val copy = Gson().fromJson<FlatTaskDTO>(json, FlatTaskDTO::class.java)
+
+        println(copy)
+
+        // todo get parent from id and apply on the copy
+        // create new ids for the subTasks
+        // todo Gson clone and change the ids
+
     }
 
     override fun edit(flatTaskDTO: FlatTaskDTO) {

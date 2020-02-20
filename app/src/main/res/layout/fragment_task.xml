@@ -68,4 +68,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_date" />
 
+    <Switch
+        android:id="@+id/sw_completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vs_sub_tasks" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
