@@ -19,13 +19,13 @@ class FlatTaskDTO(
 ) :
     BaseEntity(id, createdAt, updatedAt), Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readParcelable(Label::class.java.classLoader),
+        parcel.readParcelable(Label::class.java.classLoader)!!,
         parcel.readValue(Long::class.java.classLoader) as? Long,
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readByte() != 0.toByte(),
-        parcel.readParcelableArray(FlatTaskDTO::class.java.classLoader).toMutableList<Parcelable>() as MutableList<FlatTaskDTO>,
-        parcel.readParcelableArray(Attachment::class.java.classLoader).toMutableList<Parcelable>() as MutableList<Attachment>,
+        parcel.readParcelableArray(FlatTaskDTO::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<FlatTaskDTO>,
+        parcel.readParcelableArray(Attachment::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<Attachment>,
         parcel.readLong(),
         parcel.readValue(Date::class.java.classLoader) as Date?,
         parcel.readValue(Date::class.java.classLoader) as Date?

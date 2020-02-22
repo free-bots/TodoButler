@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.createViewModelLazy
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_labels.*
@@ -15,11 +18,17 @@ import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.LabelsAdapter
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
+import to.freebots.todobutler.viewmodels.LabelViewModel
 
 /**
  * [Fragment] for browse and editing labels.
  */
 class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
+
+    private val viewModel: LabelViewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application!!)
+            .create(LabelViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +41,6 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val labelsAdapter = LabelsAdapter()
-
-        labelsAdapter.labels = Mock.listOfLabels
-
         labelsAdapter.action = object : LabelsAdapter.Action {
             override fun edit(label: Label) {
                 Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
@@ -56,6 +62,11 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
             Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
             showInfoOfLabel(Label("new"))
         }
+
+
+        viewModel.labels.observe(this, Observer { t: MutableList<Label> ->
+            labelsAdapter.labels = Mock.listOfLabels
+        })
     }
 
     private fun showInfoOfLabel(label: Label) {
@@ -68,5 +79,6 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
     override fun labelInfo(label: Label) {
         Toast.makeText(context, label.name, Toast.LENGTH_LONG).show()
+        viewModel.update(label)
     }
 }

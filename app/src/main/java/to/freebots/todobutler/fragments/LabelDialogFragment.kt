@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_label_info.*
 import to.freebots.todobutler.R
@@ -27,8 +28,11 @@ class LabelDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         label = arguments?.getParcelable<Label>("label")
 
-        label?.let {
+        label?.also {
             labelNameET.setText(it.name)
+            labelNameET.doOnTextChanged { text, _, _, _ ->
+                it.name = text.toString()
+            }
         }
     }
 

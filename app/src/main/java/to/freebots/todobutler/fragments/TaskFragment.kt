@@ -22,6 +22,8 @@ import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  * [Fragment] to show the details of a task.
@@ -113,23 +115,25 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
     private fun applyListeners() {
 
-        tv_date.setOnClickListener { v ->
-            DatePickerDialog(context!!, this, 2020, 2, 19).show()
+        val now = LocalDateTime.now()
+
+        tv_date.setOnClickListener {
+            DatePickerDialog(context!!, this, now.year, now.monthValue - 1, now.dayOfMonth).show()
         }
 
-        tv_time.setOnClickListener { v ->
-            TimePickerDialog(context!!, this, 24, 21, true).show()
+        tv_time.setOnClickListener {
+            TimePickerDialog(context!!, this, now.hour, now.minute, true).show()
         }
 
-        sw_completed.setOnCheckedChangeListener { buttonView, isChecked ->
-
-        }
-
-        et_name.doOnTextChanged { text, start, count, after ->
+        sw_completed.setOnCheckedChangeListener { _, isChecked ->
 
         }
 
-        et_desc.doOnTextChanged { text, start, count, after -> }
+        et_name.doOnTextChanged { text, _, _, _ ->
+
+        }
+
+        et_desc.doOnTextChanged { text, _, _, _ -> }
     }
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
@@ -138,7 +142,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             inflatedView = vs_sub_tasks.inflate()
         }
 
-        inflatedView?.let { view ->
+        inflatedView?.let {
             rv_tasks?.adapter = TasksAdapter().apply {
                 action = this@TaskFragment
                 tasks = subTasks
@@ -147,8 +151,10 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     private fun cloneTask(flatTaskDTO: FlatTaskDTO) {
-        val json = Gson().toJson(FlatTaskDTO)
+        val json = Gson().toJson(flatTaskDTO)
         val copy = Gson().fromJson<FlatTaskDTO>(json, FlatTaskDTO::class.java)
+
+
 
         println(copy)
 
@@ -170,10 +176,17 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = LocalDateTime.now()
+            .withYear(year)
+            .withMonth(month + 1)
+            .withDayOfMonth(dayOfMonth)
         // TODO update reminder
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        var time = LocalDateTime.now()
+            .withHour(hourOfDay)
+            .withMinute(minute)
         // TODO update reminder
     }
 }
