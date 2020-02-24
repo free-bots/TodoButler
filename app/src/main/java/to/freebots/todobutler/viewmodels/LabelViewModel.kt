@@ -1,38 +1,58 @@
 package to.freebots.todobutler.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.GlobalScope
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
 
-class LabelViewModel(application: Application) : AndroidViewModel(application) {
+class LabelViewModel(application: Application) : BaseViewModel(application), BaseOperations<Label> {
 
     val labels: MutableLiveData<MutableList<Label>> = MutableLiveData()
 
-    var _labels: MutableList<Label> = mutableListOf()
+    private var _labels: MutableList<Label> = mutableListOf()
 
     init {
         fetchAll()
     }
 
-    fun fetchAll() {
+    override fun fetchAll() {
+        GlobalScope.runCatching {
+            labelDao.findAll()
+        }
         _labels = Mock.listOfLabels
         labels.postValue(Mock.listOfLabels)
     }
 
-    fun update(label: Label) {
-        val index = _labels.indexOfFirst { l -> l.id == label.id }
+    override fun create(e: Label) {
+        _labels.add(e)
+        labels.postValue(_labels)
+    }
+
+    override fun update(e: Label) {
+        val index = findIndexOfLabel(e);
         if (index > -1) {
             // update existing
-            _labels[index] = label
-        } else {
-            // create new
-            _labels.add(label)
+            _labels[index] = e
+            labels.postValue(_labels)
         }
+    }
+
+    override fun delete(e: Label) {
+        _labels = _labels.filter { l -> l.id != e.id }.toMutableList()
         labels.postValue(_labels)
+    }
+
+    private fun findIndexOfLabel(label: Label): Int {
+        return _labels.indexOfFirst { l -> l.id == label.id }
+    }
+
+    fun newLabelValues(label: Label) {
+        val index = findIndexOfLabel(label);
+        if (index > -1) {
+            update(label)
+        } else {
+            create(label)
+        }
     }
 }

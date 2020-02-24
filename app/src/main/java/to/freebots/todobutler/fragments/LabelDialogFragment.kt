@@ -28,10 +28,14 @@ class LabelDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         label = arguments?.getParcelable<Label>("label")
 
-        label?.also {
-            labelNameET.setText(it.name)
+        label?.also {itLabel ->
+            labelNameET.setText(itLabel.name)
             labelNameET.doOnTextChanged { text, _, _, _ ->
-                it.name = text.toString()
+                itLabel.name = text.toString()
+            }
+
+            ib_delete.setOnClickListener {
+                editListener?.delete(itLabel)
             }
         }
     }
@@ -50,6 +54,7 @@ class LabelDialogFragment : BottomSheetDialogFragment() {
 
     interface EditListener {
         fun labelInfo(label: Label)
+        fun delete(label: Label)
     }
 
     companion object {

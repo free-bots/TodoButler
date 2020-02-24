@@ -65,7 +65,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
 
         viewModel.labels.observe(this, Observer { t: MutableList<Label> ->
-            labelsAdapter.labels = Mock.listOfLabels
+            labelsAdapter.labels = t
         })
     }
 
@@ -79,6 +79,10 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
     override fun labelInfo(label: Label) {
         Toast.makeText(context, label.name, Toast.LENGTH_LONG).show()
-        viewModel.update(label)
+        viewModel.newLabelValues(label)
+    }
+
+    override fun delete(label: Label) {
+        viewModel.delete(label)
     }
 }
