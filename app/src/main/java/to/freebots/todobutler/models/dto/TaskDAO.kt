@@ -1,6 +1,7 @@
 package to.freebots.todobutler.models.dto
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import to.freebots.todobutler.common.dao.BaseDAO
@@ -25,12 +26,21 @@ abstract class TaskDAO : BaseDAO<Task> {
     @Query("SELECT * from Task WHERE id=:id")
     abstract fun findDTOById(id: Long): TaskDTO
 
+    fun findFlatTaskDTOById(id:Long): FlatTaskDTO {
+       return flatDTO(findDTOById(id))
+    }
 
     fun findAllFlatTaskDTO(): MutableList<FlatTaskDTO> {
         return findAllDTO().map { taskDTO ->
             flatDTO(taskDTO)
         }.toMutableList()
     }
+
+    @Insert
+    abstract fun insert(tasks: MutableList<Task>)
+
+    @Query("DELETE FROM Task WHERE id=:id")
+    abstract fun deleteById(id: Long)
 
     /**
      * converts the database representation to a object relation

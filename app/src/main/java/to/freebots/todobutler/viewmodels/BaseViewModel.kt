@@ -2,6 +2,7 @@ package to.freebots.todobutler.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import to.freebots.todobutler.common.entities.BaseEntity
 import to.freebots.todobutler.models.database.Database
 
 abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,5 +18,9 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     protected val taskDAO by lazy {
         database.taskDAO()
+    }
+
+    protected fun findIndex(baseEntity: BaseEntity, baseEntitys: MutableList<BaseEntity>): Int {
+        return baseEntitys.indexOfFirst { b -> b.id == baseEntity.id }
     }
 }

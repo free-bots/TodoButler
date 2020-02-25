@@ -3,6 +3,7 @@ package to.freebots.todobutler.viewmodels
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.GlobalScope
+import to.freebots.todobutler.common.entities.BaseEntity
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
 
@@ -30,7 +31,7 @@ class LabelViewModel(application: Application) : BaseViewModel(application), Bas
     }
 
     override fun update(e: Label) {
-        val index = findIndexOfLabel(e);
+        val index = findIndex(e, _labels as MutableList<BaseEntity>)
         if (index > -1) {
             // update existing
             _labels[index] = e
@@ -43,12 +44,8 @@ class LabelViewModel(application: Application) : BaseViewModel(application), Bas
         labels.postValue(_labels)
     }
 
-    private fun findIndexOfLabel(label: Label): Int {
-        return _labels.indexOfFirst { l -> l.id == label.id }
-    }
-
     fun newLabelValues(label: Label) {
-        val index = findIndexOfLabel(label);
+        val index = findIndex(label, _labels as MutableList<BaseEntity>)
         if (index > -1) {
             update(label)
         } else {

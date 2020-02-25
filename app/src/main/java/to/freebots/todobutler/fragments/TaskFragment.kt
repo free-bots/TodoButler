@@ -12,6 +12,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -22,6 +23,7 @@ import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
+import to.freebots.todobutler.viewmodels.TaskViewModel
 import java.time.LocalDateTime
 import java.util.*
 
@@ -30,6 +32,11 @@ import java.util.*
  */
 class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
+
+    val viewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application!!)
+            .create(TaskViewModel::class.java)
+    }
 
     private var inflatedView: View? = null
 
@@ -49,6 +56,11 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         when (item.itemId) {
             R.id.menu_delete -> {
                 // TODO delete and close fragment
+                arguments?.let {
+                    it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                        viewModel.delete(flatTaskDTO)
+                    }
+                }
                 findNavController().navigateUp()
                 return true
             }
@@ -71,7 +83,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 // TODO create a copy of the current task
                 arguments?.let {
                     it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        cloneTask(flatTaskDTO)
+                        viewModel.copyIntoParrent(flatTaskDTO)
+                        // navigate to parent or the new child
                     }
                 }
                 return true
@@ -148,20 +161,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 tasks = subTasks
             }
         }
-    }
-
-    private fun cloneTask(flatTaskDTO: FlatTaskDTO) {
-        val json = Gson().toJson(flatTaskDTO)
-        val copy = Gson().fromJson<FlatTaskDTO>(json, FlatTaskDTO::class.java)
-
-
-
-        println(copy)
-
-        // todo get parent from id and apply on the copy
-        // create new ids for the subTasks
-        // todo Gson clone and change the ids
-
     }
 
     override fun edit(flatTaskDTO: FlatTaskDTO) {
