@@ -80,6 +80,6 @@ class TasksFromLabelFragment : Fragment() {
             )
         }
 
-        viewModel.tasks.observe(this, Observer { t ->  })
+        viewModel.tasks.observe(this, Observer { t ->  tasksAdapter.tasks = t})
     }
 }

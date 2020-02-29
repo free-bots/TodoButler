@@ -1,11 +1,14 @@
 package to.freebots.todobutler.models.dto
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.FlatTaskDTO
+import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
 
@@ -15,6 +18,9 @@ abstract class TaskDAO : BaseDAO<Task> {
     @Query("SELECT * from Task")
     abstract fun findAll(): MutableList<Task>
 
+    @Query("SELECT * from Task")
+    abstract fun findAllLiveData(): LiveData<MutableList<Task>>
+
     @Query("SELECT * FROM Task WHERE id=:id")
     abstract fun findById(id: Long): Task
 
@@ -23,18 +29,16 @@ abstract class TaskDAO : BaseDAO<Task> {
     abstract fun findAllDTO(): MutableList<TaskDTO>
 
     @Transaction
+    @Query("SELECT * from Task WHERE parentTaskId ISNULL")
+    abstract fun findAllDTOLiveData(): LiveData<MutableList<TaskDTO>>
+
+    @Transaction
+    @Query("SELECT * from Task WHERE parentTaskId ISNULL")
+    abstract fun findAllDTOFlowable(): Flowable<MutableList<TaskDTO>>
+
+    @Transaction
     @Query("SELECT * from Task WHERE id=:id")
     abstract fun findDTOById(id: Long): TaskDTO
-
-    fun findFlatTaskDTOById(id:Long): FlatTaskDTO {
-       return flatDTO(findDTOById(id))
-    }
-
-    fun findAllFlatTaskDTO(): MutableList<FlatTaskDTO> {
-        return findAllDTO().map { taskDTO ->
-            flatDTO(taskDTO)
-        }.toMutableList()
-    }
 
     @Insert
     abstract fun insert(tasks: MutableList<Task>)
@@ -42,27 +46,6 @@ abstract class TaskDAO : BaseDAO<Task> {
     @Query("DELETE FROM Task WHERE id=:id")
     abstract fun deleteById(id: Long)
 
-    /**
-     * converts the database representation to a object relation
-     * @param taskDTO database representation
-     */
-    private fun flatDTO(
-        taskDTO: TaskDTO
-    ): FlatTaskDTO {
-        val subTasks: MutableList<FlatTaskDTO> =
-            taskDTO.subTasks.map { task: Task -> flatDTO(findDTOById(task.id)) }.toMutableList()
-
-        return FlatTaskDTO(
-            label = taskDTO.label,
-            name = taskDTO.task.name,
-            description = taskDTO.task.description,
-            isCompleted = taskDTO.task.isCompleted,
-            createdAt = taskDTO.task.createdAt,
-            updatedAt = taskDTO.task.updatedAt,
-            id = taskDTO.task.id,
-            attachments = taskDTO.attachments,
-            parentTaskId = taskDTO.task.parentTaskId,
-            subTasks = subTasks
-        )
-    }
+    @Query("SELECT * FROM Task WHERE rowid=:rowId")
+    abstract fun findByRowId(rowId: Long): Task
 }

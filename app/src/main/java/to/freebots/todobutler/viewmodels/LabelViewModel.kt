@@ -1,55 +1,50 @@
 package to.freebots.todobutler.viewmodels
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.GlobalScope
 import to.freebots.todobutler.common.entities.BaseEntity
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
+import to.freebots.todobutler.models.logic.LabelService
 
 class LabelViewModel(application: Application) : BaseViewModel(application), BaseOperations<Label> {
 
-    val labels: MutableLiveData<MutableList<Label>> = MutableLiveData()
+    private val labelService: LabelService by lazy {
+        LabelService(application)
+    }
 
-    private var _labels: MutableList<Label> = mutableListOf()
+    val labels: LiveData<MutableList<Label>>
 
     init {
-        fetchAll()
+        labels = labelService.findAllLiveData()
     }
 
     override fun fetchAll() {
-        GlobalScope.runCatching {
-            labelDao.findAll()
-        }
-        _labels = Mock.listOfLabels
-        labels.postValue(Mock.listOfLabels)
+//        labels.postValue(Mock.listOfLabels)
     }
 
     override fun create(e: Label) {
-        _labels.add(e)
-        labels.postValue(_labels)
+        labelService.createAsync(e)
     }
 
     override fun update(e: Label) {
-        val index = findIndex(e, _labels as MutableList<BaseEntity>)
-        if (index > -1) {
-            // update existing
-            _labels[index] = e
-            labels.postValue(_labels)
-        }
+        labelService.updateAsync(e)
     }
 
     override fun delete(e: Label) {
-        _labels = _labels.filter { l -> l.id != e.id }.toMutableList()
-        labels.postValue(_labels)
+        labelService.deleteAsync(e)
     }
 
     fun newLabelValues(label: Label) {
-        val index = findIndex(label, _labels as MutableList<BaseEntity>)
-        if (index > -1) {
-            update(label)
-        } else {
-            create(label)
+        labels.value?.let {
+            val index = findIndex(label, it as MutableList<BaseEntity>)
+            if (index > -1) {
+                update(label)
+            } else {
+                create(label)
+            }
         }
     }
 }

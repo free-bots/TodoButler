@@ -4,28 +4,22 @@ package to.freebots.todobutler.fragments
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.JsonWriter
 import android.view.*
 import android.widget.DatePicker
-import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_task.*
-import org.json.JSONObject
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.viewmodels.TaskViewModel
 import java.time.LocalDateTime
-import java.util.*
 
 /**
  * [Fragment] to show the details of a task.
@@ -83,7 +77,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 // TODO create a copy of the current task
                 arguments?.let {
                     it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        viewModel.copyIntoParrent(flatTaskDTO)
+                        viewModel.copyIntoParent(flatTaskDTO)
                         // navigate to parent or the new child
                     }
                 }

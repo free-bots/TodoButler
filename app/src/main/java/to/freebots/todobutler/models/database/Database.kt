@@ -6,7 +6,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.dto.AttachmentDAO
 import to.freebots.todobutler.models.dto.LabelDAO
 import to.freebots.todobutler.models.dto.TaskDAO
@@ -35,6 +37,7 @@ abstract class Database : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch {
                     database.clearAllTables()
+                    Mock.applyToDatabase(database)
                 }
             }
         }
@@ -55,7 +58,7 @@ abstract class Database : RoomDatabase() {
                     Database::class.java,
                     "database"
                 )
-//                    .addCallback(DatabaseCallback(GlobalScope))
+                    .addCallback(DatabaseCallback(GlobalScope))
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build()
