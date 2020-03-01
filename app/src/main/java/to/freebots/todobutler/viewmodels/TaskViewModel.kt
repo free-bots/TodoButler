@@ -9,6 +9,7 @@ import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.entities.Task
+import to.freebots.todobutler.models.logic.AttachmetService
 import to.freebots.todobutler.models.logic.FlatTaskService
 import to.freebots.todobutler.models.logic.LabelService
 import to.freebots.todobutler.models.logic.TaskService
@@ -21,7 +22,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     private val flatTaskService by lazy {
-        FlatTaskService(application, taskService)
+        FlatTaskService(application, taskService, AttachmetService(application))
     }
 
     private val errorHandler = Consumer<Any> { t ->
