@@ -23,7 +23,7 @@ import to.freebots.todobutler.viewmodels.TaskViewModel
  */
 class TasksFromLabelFragment : Fragment() {
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application!!)
             .create(TaskViewModel::class.java)
     }
@@ -80,6 +80,6 @@ class TasksFromLabelFragment : Fragment() {
             )
         }
 
-        viewModel.tasks.observe(this, Observer { t ->  tasksAdapter.tasks = t})
+        viewModel.flatTasks.observe(this, Observer { t ->  tasksAdapter.tasks = t})
     }
 }

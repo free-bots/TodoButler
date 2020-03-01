@@ -2,14 +2,10 @@ package to.freebots.todobutler.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ComputableLiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.BackpressureStrategy
 import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.GlobalScope
+import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.entities.Task
@@ -25,12 +21,16 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     private val flatTaskService by lazy {
-        FlatTaskService(application)
+        FlatTaskService(application, taskService)
     }
 
-    private val errorHandler = Consumer<Throwable> { t ->
+    private val errorHandler = Consumer<Any> { t ->
         // todo show error message in ui
-        Log.e(this.javaClass.canonicalName, t.message, t)
+        when (t) {
+            is Throwable -> {
+                Log.e(this.javaClass.canonicalName, t.message, t)
+            }
+        }
     }
 
     private val onFlatTaskDTO = Consumer<Any> { t: Any ->
@@ -43,15 +43,24 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
     init {
         subscribe(
-            applyBackgroundScheduler(flatTaskService.flatTaskObservable.toObservable()).subscribe(
+            applyBackgroundScheduler(flatTaskService.findAllFlatTasks.toObservable()).subscribe(
                 onFlatTaskDTO, errorHandler
             )
+        )
+
+        subscribe(
+            applyBackgroundScheduler(
+                BaseLogicService.errorChannel.toFlowable(
+                    BackpressureStrategy.MISSING
+                ).toObservable()
+            ).subscribe(errorHandler)
         )
     }
 
     val tasks = taskService.findAllTask()
     private val _flatTasks = MutableLiveData<MutableList<FlatTaskDTO>>()
 
+    val flatTasks = _flatTasks
 
     private var _tasks: MutableList<FlatTaskDTO> = mutableListOf()
 
@@ -87,7 +96,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     override fun delete(e: FlatTaskDTO) {
-
+        flatTaskService.deleteAsync(e)
     }
 
     fun filterByLabel(label: Label) {

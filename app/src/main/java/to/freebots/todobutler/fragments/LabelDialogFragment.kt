@@ -13,6 +13,8 @@ import to.freebots.todobutler.models.entities.Label
 
 class LabelDialogFragment : BottomSheetDialogFragment() {
 
+    private var deleted = false
+
     var editListener: EditListener? = null
 
     var label: Label? = null
@@ -26,24 +28,28 @@ class LabelDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        label = arguments?.getParcelable<Label>("label")
+        label = arguments?.getParcelable("label")
 
-        label?.also {itLabel ->
+        label?.also { itLabel ->
             labelNameET.setText(itLabel.name)
             labelNameET.doOnTextChanged { text, _, _, _ ->
                 itLabel.name = text.toString()
             }
 
             ib_delete.setOnClickListener {
+                deleted = true
                 editListener?.delete(itLabel)
+                dismiss()
             }
         }
     }
 
     override fun onDetach() {
-        editListener?.let { editListener ->
-            label?.let {
-                editListener.labelInfo(it)
+        if (!deleted) {
+            editListener?.let { editListener ->
+                label?.let {
+                    editListener.labelInfo(it)
+                }
             }
         }
 

@@ -7,8 +7,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
-import to.freebots.todobutler.models.entities.FlatTaskDTO
-import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
 
@@ -48,4 +46,9 @@ abstract class TaskDAO : BaseDAO<Task> {
 
     @Query("SELECT * FROM Task WHERE rowid=:rowId")
     abstract fun findByRowId(rowId: Long): Task
+
+    @Transaction
+    open fun deleteAllById(ids: List<Long>) {
+        ids.forEach { deleteById(it) }
+    }
 }

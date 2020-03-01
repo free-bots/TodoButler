@@ -24,4 +24,8 @@ class AttachmetService(application: Application) : BaseLogicService<Attachment>(
         attachmentDAO.delete(e)
         return e
     }
+
+    fun deleteAllByIds(id: List<Long>) {
+
+    }
 }
