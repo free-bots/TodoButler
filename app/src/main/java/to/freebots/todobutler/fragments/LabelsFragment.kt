@@ -49,9 +49,12 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
             override fun open(label: Label) {
                 Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
+                val bundle = Bundle().apply {
+                    putParcelable("label", label)
+                }
                 this@LabelsFragment.findNavController()
                     .navigate(
-                        R.id.action_labelsFragment_to_tasksFromLabelFragment
+                        R.id.action_labelsFragment_to_tasksFromLabelFragment, bundle
                     )
             }
         }

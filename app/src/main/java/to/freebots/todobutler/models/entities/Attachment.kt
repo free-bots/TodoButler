@@ -11,7 +11,7 @@ class Attachment(
     var taskId: Long,
     var name: String,
     var path: String,
-    id: Long = 0,
+    id: Long? = 0,
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) :
@@ -20,7 +20,7 @@ class Attachment(
         parcel.readLong(),
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readLong(),
+        parcel.readValue(Long::class.java.classLoader) as Long?,
         parcel.readValue(Date::class.java.classLoader) as Date?,
         parcel.readValue(Date::class.java.classLoader) as Date?
         ) {
@@ -30,7 +30,7 @@ class Attachment(
         parcel.writeLong(taskId)
         parcel.writeString(name)
         parcel.writeString(path)
-        parcel.writeLong(id)
+        parcel.writeValue(id)
         parcel.writeValue(createdAt)
         parcel.writeValue(updatedAt)
     }

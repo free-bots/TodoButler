@@ -10,16 +10,28 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.content_tasks.*
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_task.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
-import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.viewmodels.TaskViewModel
 import java.time.LocalDateTime
+
+
+/*
+
+todo add swipe refresh layout and update with swipe
+
+
+
+
+ */
+
 
 /**
  * [Fragment] to show the details of a task.
@@ -27,7 +39,9 @@ import java.time.LocalDateTime
 class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
-    val viewModel by lazy {
+    private lateinit var flatTaskDTO: FlatTaskDTO
+
+    private val viewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application!!)
             .create(TaskViewModel::class.java)
     }
@@ -67,17 +81,28 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 return true
             }
             R.id.menu_subtask -> {
-                val bundle = Bundle().apply {
-                    putParcelable("flatTaskDTO", Mock.flatTaskDTOWithSubTask)
+                arguments?.let {
+                    it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                        viewModel.createSubTask(flatTaskDTO).subscribe { t: FlatTaskDTO? ->
+                            val bundle = Bundle().apply {
+                                putParcelable("flatTaskDTO", t)
+                            }
+                            findNavController().navigate(R.id.action_taskFragment_self, bundle)
+                        }
+                    }
                 }
-                findNavController().navigate(R.id.action_taskFragment_self, bundle)
                 return true
             }
             R.id.menu_clone -> {
                 // TODO create a copy of the current task
                 arguments?.let {
                     it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        viewModel.copyIntoParent(flatTaskDTO)
+                        viewModel.copyIntoParent(flatTaskDTO).subscribe { t ->
+                            val bundle = Bundle().apply {
+                                putParcelable("flatTaskDTO", t)
+                            }
+                            findNavController().navigate(R.id.action_taskFragment_self, bundle)
+                        }
                         // navigate to parent or the new child
                     }
                 }
@@ -101,13 +126,17 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                applyTaskOnView(flatTaskDTO)
+        arguments?.let { arg ->
+            arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                viewModel.getUpdated(flatTaskDTO.id!!)
             }
-        }
 
-        applyListeners()
+            viewModel.TEST().observe(this, Observer {
+                applyTaskOnView(it)
+                applyListeners(it)
+                this.flatTaskDTO = it
+            })
+        }
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {
@@ -120,7 +149,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         showSubTasks(flatTaskDTO.subTasks)
     }
 
-    private fun applyListeners() {
+    private fun applyListeners(flatTaskDTO: FlatTaskDTO) {
 
         val now = LocalDateTime.now()
 
@@ -133,28 +162,39 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         }
 
         sw_completed.setOnCheckedChangeListener { _, isChecked ->
-
+            viewModel.update(flatTaskDTO.apply { isCompleted = isChecked })
         }
 
         et_name.doOnTextChanged { text, _, _, _ ->
-
+            viewModel.update(flatTaskDTO.apply { name = text.toString() })
         }
 
-        et_desc.doOnTextChanged { text, _, _, _ -> }
+        et_desc.doOnTextChanged { text, _, _, _ ->
+           viewModel.update(flatTaskDTO.apply { description = text.toString() })
+        }
     }
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
 
-        if (subTasks.isEmpty().not()) {
+        if (subTasks.isEmpty().not().and(inflatedView == null)) {
             inflatedView = vs_sub_tasks.inflate()
         }
 
-        inflatedView?.let {
-            rv_tasks?.adapter = TasksAdapter().apply {
+        if (inflatedView != null) {
+            val view = inflatedView?.findViewById<RecyclerView>(R.id.rv_tasks)
+
+            view?.adapter = TasksAdapter().apply {
                 action = this@TaskFragment
                 tasks = subTasks
             }
         }
+
+//        inflatedView?.let {
+//            rv_tasks?.adapter = TasksAdapter().apply {
+//                action = this@TaskFragment
+//                tasks = subTasks
+//            }
+//        }
     }
 
     override fun edit(flatTaskDTO: FlatTaskDTO) {

@@ -22,7 +22,7 @@ class Mock {
 
             val basicLabels = createLabels(labelDAO)
 
-            val labelId: Long = basicLabels[0].id
+            val labelId: Long = basicLabels[0].id!!
             // add mock data
 
             val parentTask = createTask(taskDAO, Task(labelId, null, "parent", "parent", false))
@@ -48,19 +48,19 @@ class Mock {
                 )
             )
 
-            val parentId: Long = parentTask.id
+            val parentId: Long = parentTask.id!!
             val attachmentOfParent = createAttachment(attachmentDAO, Attachment(parentId, "", ""))
 
             val attachmentOfChild =
-                createAttachment(attachmentDAO, Attachment(children[0].id, "", ""))
+                createAttachment(attachmentDAO, Attachment(children[0].id!!, "", ""))
 
 
             val childrenOfChildern = createSubTaskOf(
                 taskDAO, children[0], listOf(
-                    Task(basicLabels[1].id, null, "child", "child", false),
-                    Task(basicLabels[1].id, null, "child", "child", false),
-                    Task(basicLabels[2].id, null, "child", "child", false),
-                    Task(basicLabels[2].id, null, "child", "child", false)
+                    Task(basicLabels[1].id!!, null, "child", "child", false),
+                    Task(basicLabels[1].id!!, null, "child", "child", false),
+                    Task(basicLabels[2].id!!, null, "child", "child", false),
+                    Task(basicLabels[2].id!!, null, "child", "child", false)
                 )
             )
         }

@@ -13,7 +13,7 @@ class FlatTaskDTO(
     var isCompleted: Boolean,
     var subTasks: MutableList<FlatTaskDTO>,
     var attachments: MutableList<Attachment>,
-    id: Long = 0,
+    id: Long? = 0,
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) :
@@ -26,7 +26,7 @@ class FlatTaskDTO(
         parcel.readByte() != 0.toByte(),
         parcel.readParcelableArray(FlatTaskDTO::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<FlatTaskDTO>,
         parcel.readParcelableArray(Attachment::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<Attachment>,
-        parcel.readLong(),
+        parcel.readValue(Long::class.java.classLoader) as Long?,
         parcel.readValue(Date::class.java.classLoader) as Date?,
         parcel.readValue(Date::class.java.classLoader) as Date?
     ) {
@@ -40,7 +40,7 @@ class FlatTaskDTO(
         parcel.writeByte(if (isCompleted) 1 else 0)
         parcel.writeParcelableArray(subTasks.toTypedArray(), flags)
         parcel.writeParcelableArray(attachments.toTypedArray(), flags)
-        parcel.writeLong(id)
+        parcel.writeValue(id)
         parcel.writeValue(createdAt)
         parcel.writeValue(updatedAt)
     }

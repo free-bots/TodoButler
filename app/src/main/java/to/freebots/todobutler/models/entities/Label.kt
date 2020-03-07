@@ -9,7 +9,7 @@ import java.util.*
 @Entity
 class Label(
     var name: String,
-    id: Long = 0,
+    id: Long? = null,
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) : BaseEntity(id, createdAt, updatedAt), Parcelable {

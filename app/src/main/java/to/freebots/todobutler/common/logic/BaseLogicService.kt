@@ -33,7 +33,7 @@ abstract class BaseLogicService<E : BaseEntity>(application: Application) {
         return baseEntities.indexOfFirst { b -> b.id == baseEntity.id }
     }
 
-    protected fun copy(e: Any, objClass: Class<Any>): Any {
+    protected fun copy(e: Any, objClass: Class<*>): Any {
         val json = Gson().toJson(e)
         return Gson().fromJson<FlatTaskDTO>(json, objClass)
     }

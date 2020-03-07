@@ -11,7 +11,7 @@ class Task(
     var name: String,
     var description: String,
     var isCompleted: Boolean,
-    id: Long = 0,
+    id: Long? = 0,
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) :

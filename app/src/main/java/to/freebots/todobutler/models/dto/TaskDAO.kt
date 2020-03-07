@@ -27,6 +27,14 @@ abstract class TaskDAO : BaseDAO<Task> {
     abstract fun findAllDTO(): MutableList<TaskDTO>
 
     @Transaction
+    @Query("SELECT * from Task WHERE parentTaskId =:parent AND id=:id")
+    abstract fun findByIdDTO(parent: Long?, id: Long): TaskDTO
+
+    @Transaction
+    @Query("SELECT * from Task WHERE id=:id")
+    abstract fun findByIdDTO1(id: Long): TaskDTO
+
+    @Transaction
     @Query("SELECT * from Task WHERE parentTaskId ISNULL")
     abstract fun findAllDTOLiveData(): LiveData<MutableList<TaskDTO>>
 
@@ -38,8 +46,12 @@ abstract class TaskDAO : BaseDAO<Task> {
     @Query("SELECT * from Task WHERE id=:id")
     abstract fun findDTOById(id: Long): TaskDTO
 
+    @Transaction
+    @Query("SELECT * from Task WHERE id=:id")
+    abstract fun findDTOByIdTEST(id: Long): Flowable<TaskDTO>
+
     @Insert
-    abstract fun insert(tasks: MutableList<Task>)
+    abstract fun insert(tasks: MutableList<Task>): List<Long>
 
     @Query("DELETE FROM Task WHERE id=:id")
     abstract fun deleteById(id: Long)

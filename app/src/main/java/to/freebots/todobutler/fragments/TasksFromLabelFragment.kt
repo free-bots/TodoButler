@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks_from_label.*
 import to.freebots.todobutler.R
@@ -30,7 +31,7 @@ class TasksFromLabelFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.getParcelable<Label>("label")?.let {
+        getLabel()?.let {
             viewModel.filterByLabel(it)
         }
     }
@@ -46,11 +47,7 @@ class TasksFromLabelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var tasksAdapter = TasksAdapter()
-
-        var tasks: MutableList<FlatTaskDTO> = Mock.listOfFlatTaskDTO
-
-        tasksAdapter.tasks = tasks
+        val tasksAdapter = TasksAdapter()
 
         tasksAdapter.action = object : TasksAdapter.Action {
             override fun edit(flatTaskDTO: FlatTaskDTO) {
@@ -71,15 +68,25 @@ class TasksFromLabelFragment : Fragment() {
         rv_tasks.adapter = tasksAdapter
 
         addTaskFab.setOnClickListener {
-            val bundle = Bundle().apply {
-                putParcelable("flatTaskDTO", Mock.flatTaskDTOWithSubTask)
+            getLabel()?.let { label ->
+                viewModel.createDefaultFlatTask(label).subscribe {
+                    val bundle = Bundle().apply {
+                        putParcelable("flatTaskDTO", it)
+                    }
+                    findNavController().navigate(
+                        R.id.action_tasksFromLabelFragment_to_taskFragment,
+                        bundle
+                    )
+                }
             }
-            findNavController().navigate(
-                R.id.action_tasksFromLabelFragment_to_taskFragment,
-                bundle
-            )
         }
 
-        viewModel.flatTasks.observe(this, Observer { t ->  tasksAdapter.tasks = t})
+        viewModel.flatTasks.observe(this, Observer { t ->
+            tasksAdapter.tasks = viewModel.filterByLabel(t)
+        })
+    }
+
+    private fun getLabel(): Label? {
+        return arguments?.getParcelable("label")
     }
 }
