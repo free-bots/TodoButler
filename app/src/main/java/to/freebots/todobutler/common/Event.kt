@@ -4,6 +4,9 @@ class Event<E>(val value: E) {
     private var consumed = false
     fun peek(): E = value
     fun consume():E? {
-        return if(consumed) null else value
+        return if(consumed) null else {
+            consumed = true
+            value
+        }
     }
 }

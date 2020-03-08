@@ -17,7 +17,27 @@ import to.freebots.todobutler.models.logic.*
 class TaskViewModel(application: Application) : BaseViewModel(application), BaseOperations<Task>,
     BaseFlatTaskOperations {
 
-    private val _task: MutableLiveData<FlatTaskDTO> = MutableLiveData()
+    // todo swipeRefresh layout....
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    val isEditing: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var _current: FlatTaskDTO? = null
+
+    // flatTaskDTO editable fields
+    val name: MutableLiveData<String> = MutableLiveData()
+    val description: MutableLiveData<String> = MutableLiveData()
+    val isCompleted: MutableLiveData<Boolean> = MutableLiveData()
+    val subTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
+
+
+    // navigate on new subTasks, clone ....
+    val navigate: MutableLiveData<Event<FlatTaskDTO>> = MutableLiveData()
+
+
+    val a: MutableLiveData<String> = MutableLiveData("HI")
+
+    val _task: MutableLiveData<FlatTaskDTO> = MutableLiveData()
 
     private var _filterLabel: Label? = null
 
@@ -130,25 +150,57 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         // notify
     }
 
+    fun update() {
+        _current?.name = name.value!!
+        _current?.description = description.value!!
+        _current?.isCompleted = isCompleted.value!!
+        update(_current!!)
+        isEditing.postValue(false)
+    }
+
     /**
      * makes a copy of the current task and adds it as a child to the parent task
      */
-    fun copyIntoParent(e: FlatTaskDTO): Observable<FlatTaskDTO> {
-        return flatTaskService.copyIntoParent(e)
+    fun copyIntoParent(){
+     subscribe(flatTaskService.copyIntoParent(_current!!).subscribe{
+         t: FlatTaskDTO? ->
+         t?.let {
+             navigate(t)
+         }
+     })
     }
 
-    fun createSubTask(parrent: FlatTaskDTO): Observable<FlatTaskDTO> {
-        val default = FlatTaskDTO(
-            parrent.label,
-            parrent.id,
-            "NEW",
-            "DESC ${parrent.id}",
-            false,
-            mutableListOf(),
-            mutableListOf(),
-            null
-        )
-        return flatTaskService.createAsync(default).doOnError(errorHandler)
+
+    fun createSubTask() {
+
+        if (_current != null) {
+            val default = FlatTaskDTO(
+                _current!!.label,
+                _current!!.id,
+                "NEW",
+                "DESC ${_current!!.id}",
+                false,
+                mutableListOf(),
+                mutableListOf(),
+                null
+            )
+
+            subscribe(flatTaskService.createAsync(default).subscribe{t: FlatTaskDTO? ->
+                t?.let {
+                    navigate(t)
+                }
+            })
+        } else {
+            throw Exception("no task found")
+        }
+
+
+    }
+
+    fun navigate(e: FlatTaskDTO) {
+        // navigate and cleanup
+        _current = e
+        navigate.postValue(Event(e))
     }
 
     fun createDefaultFlatTask(label: Label): Observable<FlatTaskDTO> {
@@ -159,14 +211,26 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
 
     fun task(id: Long): LiveData<FlatTaskDTO> {
-        _task.postValue(flatTaskService.findById(id))
+        if (_task.value == null) {
+            val task = flatTaskService.findById(id)
+            _task.postValue(task)
+        }
         return _task
     }
 
     fun getUpdated(id: Long) {
         flatTaskService.test(id).subscribe{t: FlatTaskDTO? -> t?.let {
+            apply(t)
             _task.postValue(t)
         } }
+    }
+
+    private fun apply(flatTaskDTO: FlatTaskDTO) {
+        _current = flatTaskDTO
+        name.postValue(flatTaskDTO.name)
+        description.postValue(flatTaskDTO.description)
+        isCompleted.postValue(flatTaskDTO.isCompleted)
+        subTasks.postValue(flatTaskDTO.subTasks)
     }
 
     fun TEST(): LiveData<FlatTaskDTO> = _task
