@@ -14,7 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_task.*
+import kotlinx.android.synthetic.main.fragment_tasks_from_label.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.databinding.FragmentTaskBinding
@@ -40,16 +42,12 @@ todo add swipe refresh layout and update with swipe
 class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
-    private lateinit var flatTaskDTO: FlatTaskDTO
-
     private val viewModel by lazy {
         ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory(activity?.application!!)
         ).get(TaskViewModel::class.java)
     }
-
-    private var inflatedView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,14 +64,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
         when (item.itemId) {
             R.id.menu_delete -> {
-                // TODO delete and close fragment
-                // todo move to nagigation
-                arguments?.let {
-                    it.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        viewModel.delete(flatTaskDTO)
-                    }
-                }
-                findNavController().navigateUp()
+                viewModel.delete()
                 return true
             }
             R.id.menu_color -> {
@@ -90,6 +81,10 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             }
             R.id.menu_clone -> {
                 viewModel.copyIntoParent()
+                return true
+            }
+            R.id.menu_attachment -> {
+                findNavController().navigate(R.id.action_taskFragment_to_attachmentFragment)
                 return true
             }
             else -> {
@@ -119,12 +114,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
                 viewModel.getUpdated(flatTaskDTO.id!!)
             }
-
-            viewModel.TEST().observe(this, Observer {
-                // applyTaskOnView(it)
-                // applyListeners(it)
-                this.flatTaskDTO = it
-            })
         }
 
 
@@ -138,18 +127,18 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         })
 
         viewModel.navigate.observe(viewLifecycleOwner, Observer {
-            it.consume()?.let { flatTaskDTO ->
-                val bundle = Bundle().apply {
-                    putParcelable("flatTaskDTO", flatTaskDTO)
+            it.consume()?.let { eventWrapper ->
+                if (eventWrapper.navigateUp) {
+                    findNavController().navigateUp()
                 }
-                findNavController().navigate(R.id.action_taskFragment_self, bundle)
+                eventWrapper.e?.let {
+                    val bundle = Bundle().apply {
+                        putParcelable("flatTaskDTO", it)
+                    }
+                    findNavController().navigate(R.id.action_taskFragment_self, bundle)
+                }
             }
         })
-
-        Thread(Runnable {
-            sleep(5000)
-            viewModel.a.postValue("seeeeeeeeeeeeeeep")
-        }).start()
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {
@@ -172,18 +161,11 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
-
-        if (subTasks.isEmpty().not().and(inflatedView == null)) {
-            inflatedView = vs_sub_tasks.inflate()
-        }
-
-        if (inflatedView != null) {
-            val view = inflatedView?.findViewById<RecyclerView>(R.id.rv_tasks)
-
-            view?.adapter = TasksAdapter().apply {
-                action = this@TaskFragment
-                tasks = subTasks
-            }
+        if (rv_tasks.adapter == null) {
+                rv_tasks.adapter = TasksAdapter().apply {
+                    action = this@TaskFragment
+                    tasks = subTasks
+                }
         }
     }
 

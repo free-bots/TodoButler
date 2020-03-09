@@ -31,5 +31,13 @@
         <action
             android:id="@+id/action_taskFragment_self"
             app:destination="@id/taskFragment" />
+        <action
+            android:id="@+id/action_taskFragment_to_attachmentFragment"
+            app:destination="@id/attachmentFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/attachmentFragment"
+        android:name="to.freebots.todobutler.fragments.AttachmentFragment"
+        android:label="fragment_attachment"
+        tools:layout="@layout/fragment_attachment" />
 </navigation>

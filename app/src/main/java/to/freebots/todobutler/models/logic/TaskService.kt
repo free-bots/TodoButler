@@ -47,4 +47,8 @@ class TaskService(application: Application, private val labelService: LabelServi
     fun createAll(e: MutableList<Task>): MutableList<Task> {
         return taskDAO.insert(e).map { l -> findByRowId(l) }.toMutableList()
     }
+
+    fun updateAll(e: MutableList<Task>): MutableList<Int> {
+        return taskDAO.updateAll(e)
+    }
 }

@@ -22,6 +22,8 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
     val isEditing: MutableLiveData<Boolean> = MutableLiveData()
 
+    var isDeleting: MutableLiveData<Boolean> = MutableLiveData(false)
+
     private var _current: FlatTaskDTO? = null
 
     // flatTaskDTO editable fields
@@ -32,10 +34,8 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
 
     // navigate on new subTasks, clone ....
-    val navigate: MutableLiveData<Event<FlatTaskDTO>> = MutableLiveData()
+    val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
 
-
-    val a: MutableLiveData<String> = MutableLiveData("HI")
 
     val _task: MutableLiveData<FlatTaskDTO> = MutableLiveData()
 
@@ -106,10 +106,6 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
     val flatTasks = _flatTasks
 
-    private var _tasks: MutableList<FlatTaskDTO> = mutableListOf()
-
-    private var _filteredTasks: MutableList<FlatTaskDTO> = mutableListOf()
-
     override fun fetchAll() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -131,18 +127,29 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     override fun create(e: FlatTaskDTO) {
-        _tasks.add(e)
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun update(e: FlatTaskDTO) {
-        flatTaskService.updateAsync(e)
 //        // todo only update the top task in the tree -> child update self
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun delete(e: FlatTaskDTO) {
-        flatTaskService.deleteAsync(e)
+        // todo remove
+    }
+
+    fun delete() {
+        this.isDeleting.postValue(true)
+        subscribe(
+            flatTaskService.deleteRx(_current!!)
+                .subscribe({
+                    this.isDeleting.postValue(false)
+                    navigate(null, true)
+                }, {
+                    this.isDeleting.postValue(false)
+                })
+        )
     }
 
     fun filterByLabel(label: Label) {
@@ -151,23 +158,37 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     fun update() {
+
+        if (isDeleting.value ?: run { false }) {
+            return
+        }
+
+        if (_current == null) {
+            return
+        }
+
         _current?.name = name.value!!
         _current?.description = description.value!!
         _current?.isCompleted = isCompleted.value!!
-        update(_current!!)
-        isEditing.postValue(false)
+
+        subscribe(flatTaskService.updateRx(_current!!)
+            .subscribe {
+                isEditing.postValue(false)
+            }
+        )
+
     }
 
     /**
      * makes a copy of the current task and adds it as a child to the parent task
      */
-    fun copyIntoParent(){
-     subscribe(flatTaskService.copyIntoParent(_current!!).subscribe{
-         t: FlatTaskDTO? ->
-         t?.let {
-             navigate(t)
-         }
-     })
+    // todo fix -> not copy into parent with subtask
+    fun copyIntoParent() {
+        subscribe(flatTaskService.copyIntoParent(_current!!).subscribe { t: FlatTaskDTO? ->
+            t?.let {
+                navigate(t)
+            }
+        })
     }
 
 
@@ -185,7 +206,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 null
             )
 
-            subscribe(flatTaskService.createAsync(default).subscribe{t: FlatTaskDTO? ->
+            subscribe(flatTaskService.createAsync(default).subscribe { t: FlatTaskDTO? ->
                 t?.let {
                     navigate(t)
                 }
@@ -197,10 +218,10 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
     }
 
-    fun navigate(e: FlatTaskDTO) {
+    fun navigate(e: FlatTaskDTO?, navigateUp: Boolean = false) {
         // navigate and cleanup
         _current = e
-        navigate.postValue(Event(e))
+        navigate.postValue(Event(EventWrapper(e, navigateUp)))
     }
 
     fun createDefaultFlatTask(label: Label): Observable<FlatTaskDTO> {
@@ -219,10 +240,13 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     fun getUpdated(id: Long) {
-        flatTaskService.test(id).subscribe{t: FlatTaskDTO? -> t?.let {
-            apply(t)
-            _task.postValue(t)
-        } }
+        subscribe(flatTaskService.test(id)
+            .subscribe { t: FlatTaskDTO? ->
+                t?.let {
+                    apply(t)
+                    _task.postValue(t)
+                }
+            })
     }
 
     private fun apply(flatTaskDTO: FlatTaskDTO) {
@@ -233,5 +257,5 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         subTasks.postValue(flatTaskDTO.subTasks)
     }
 
-    fun TEST(): LiveData<FlatTaskDTO> = _task
+    open class EventWrapper<E>(var e: E?, val navigateUp: Boolean = false)
 }

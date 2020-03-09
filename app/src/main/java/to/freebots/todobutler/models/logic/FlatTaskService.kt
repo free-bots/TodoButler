@@ -174,8 +174,15 @@ class FlatTaskService(
                 attachmentService.createAll(attachments)
             }
 
+            taskService.updateAll(restoreTree(createdTasks, copy))
+
             findById(createdTasks.first().id!!)
         }
+    }
+
+    private fun restoreTree(tasks: MutableList<Task>, flatTaskDTO: FlatTaskDTO): MutableList<Task> {
+        // todo restore tree
+        return tasks
     }
 
 
@@ -300,9 +307,9 @@ class FlatTaskService(
         }
     }
 
-    fun deleteAsync(e: FlatTaskDTO) {
-        GlobalScope.run {
-            delete(e)
+    fun deleteRx(e: FlatTaskDTO): Observable<FlatTaskDTO> {
+        return Observable.fromCallable {
+            return@fromCallable delete(e)
         }
     }
 
@@ -322,11 +329,13 @@ class FlatTaskService(
     }
 
 
-    fun test(id:Long): Observable<FlatTaskDTO> {
+    fun test(id: Long): Observable<FlatTaskDTO> {
         return taskDAO.findDTOByIdTEST(id).map { t -> flatDTO(t) }.toObservable()
     }
 
-    fun updateAsync(e: FlatTaskDTO) {
-        taskDAO.update(flatTaskDTO_ToTaks(e))
+    fun updateRx(e: FlatTaskDTO): Observable<Int> {
+        return Observable.fromCallable {
+            taskDAO.update(flatTaskDTO_ToTaks(e))
+        }
     }
 }

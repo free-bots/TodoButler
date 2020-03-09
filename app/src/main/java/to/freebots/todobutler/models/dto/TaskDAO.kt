@@ -1,10 +1,7 @@
 package to.freebots.todobutler.models.dto
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Task
@@ -58,6 +55,9 @@ abstract class TaskDAO : BaseDAO<Task> {
 
     @Query("SELECT * FROM Task WHERE rowid=:rowId")
     abstract fun findByRowId(rowId: Long): Task
+
+    @Update
+    abstract fun updateAll(task: MutableList<Task>): MutableList<Int>
 
     @Transaction
     open fun deleteAllById(ids: List<Long>) {
