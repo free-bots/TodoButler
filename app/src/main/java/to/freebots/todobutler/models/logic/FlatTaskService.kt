@@ -134,57 +134,35 @@ class FlatTaskService(
     /**
      * makes a copy of the current task and adds it as a child to the parent task
      */
-//    fun copyIntoParent(e: FlatTaskDTO) {
-//        //todo overwrite ids
-//        // add to parent
-//        e.parentTaskId?.let {
-//            val parent = findFlatTaskDTOById(it)
-//            val copy =
-//                (copy(e, FlatTaskDTO.javaClass) as FlatTaskDTO).apply { parentTaskId = parent.id }
-//            saveCopyCascade(copy)
-//        } ?: run {
-//            // create a new task as parent
-//            val copy = copy(e, FlatTaskDTO.javaClass) as FlatTaskDTO
-//            saveCopyCascade(copy)
-//        }
-//    }
-
-
     fun copyIntoParent(e: FlatTaskDTO): Observable<FlatTaskDTO> {
         return Observable.fromCallable {
             e.description = UUID.randomUUID().toString() + LocalDateTime.now().toString()
             val copy = copy(e, FlatTaskDTO::class.java) as FlatTaskDTO
-            val tasks: MutableList<FlatTaskDTO> =
-                flatFlatTaskDTO(copy).sortedBy { flatTaskDTO -> flatTaskDTO.id }.toMutableList()
 
-            var tasksEntities: MutableList<Task> =
-                tasks.map { flatTaskDTO -> flatTaskDTO_ToTaks(flatTaskDTO) }.toMutableList()
+            val tasks = mutableListOf<Task>()
+            saveCopy(copy, null, tasks)
 
-            tasksEntities = removeIds(tasksEntities)
+            val topChild = tasks[0].apply { parentTaskId = copy.parentTaskId }
+            val topID = taskService.update(topChild).id!!
 
-
-            val createdTasks = taskService.createAll(tasksEntities)
-            createdTasks.forEachIndexed { index, task ->
-
-                val attachments = tasks[index].attachments.map { attachment ->
-                    attachment.taskId = task.id!!
-                    attachment.id = null
-                    attachment
-                }.toMutableList()
-                attachmentService.createAll(attachments)
-            }
-
-            taskService.updateAll(restoreTree(createdTasks, copy))
-
-            findById(createdTasks.first().id!!)
+            findById(topID)
         }
     }
 
-    private fun restoreTree(tasks: MutableList<Task>, flatTaskDTO: FlatTaskDTO): MutableList<Task> {
-        // todo restore tree
-        return tasks
-    }
 
+
+    private fun saveCopy(e: FlatTaskDTO, task : Task?, tasks: MutableList<Task>): Task {
+
+        // todo add other dependencies... attachments ....
+        var flat = flatTaskDTO_ToTaks(e)
+        flat.id = null
+        flat.parentTaskId = task?.id
+        flat = taskService.create(flat)
+        tasks.add(flat)
+
+        e.subTasks.forEach { t: FlatTaskDTO -> saveCopy(t, flat, tasks) }
+        return  flat
+    }
 
     private fun tasksToDelete(e: FlatTaskDTO): MutableList<Long> {
         val ids: MutableList<Long> = mutableListOf()
@@ -215,39 +193,6 @@ class FlatTaskService(
         }.toMutableList()
     }
 
-
-    private fun saveCopyCascade(e: FlatTaskDTO): FlatTaskDTO {
-        // appends the copy to the parent and overwrites the ids
-        // ignore the parent
-        // overwrite subtask ids and there parents
-        // save top to bottom
-
-        GlobalScope.runCatching {
-
-            e.label.name = "COPY"
-            val rowIndex = createFromCopy(e)
-            val all = findAllFlatTaskDTO()
-            val new = findFlatTaskDTOById(rowIndex)
-
-            // todo create labels before insert
-
-//            val flattasks = flatFlatTaskDTO(e)
-//            val taksFlat = flattasks.map { flatTaskDTO -> flatTaskDTO_ToTaks(flatTaskDTO) }
-//
-//            flatFlatTaskDTO(e).map { flatTaskDTO -> flatTaskDTO_ToTaks(flatTaskDTO) }.forEach {
-//                // save
-//            }
-
-
-            // save the child
-
-            //flatMap the subtask to a new list and don't bulk insert the id of each is needed
-
-        }
-
-        return e
-    }
-
     private fun flatFlatTaskDTO(e: FlatTaskDTO): MutableList<FlatTaskDTO> {
         val tasks: MutableList<FlatTaskDTO> = mutableListOf()
         flattenFlatTaskDTO(e, tasks, 0)
@@ -265,6 +210,26 @@ class FlatTaskService(
             flattenFlatTaskDTO(it, tasks, id - 1)
         }
     }
+
+    private fun flatFlatTaskDTO1(e: FlatTaskDTO): MutableList<FlatTaskDTO> {
+        val tasks: MutableList<FlatTaskDTO> = mutableListOf()
+        flattenFlatTaskDTO1(e, tasks, 0, null)
+        return tasks
+    }
+
+    private fun flattenFlatTaskDTO1(e: FlatTaskDTO, tasks: MutableList<FlatTaskDTO>, id: Long, parentId: Long?) {
+        val subTasks = e.subTasks
+        if (subTasks.isEmpty()) {
+            e.id = id
+            e.parentTaskId = parentId
+            tasks.add(e)
+            return
+        }
+        subTasks.forEach {
+            flattenFlatTaskDTO1(it, tasks, id - 1, id)
+        }
+    }
+
 
 
     /**
@@ -316,6 +281,7 @@ class FlatTaskService(
     private fun removeIds(tasks: MutableList<Task>): MutableList<Task> {
         return tasks.map { task ->
             task.id = null
+//            task.parentTaskId = null
             task
         }.toMutableList()
     }
@@ -333,9 +299,9 @@ class FlatTaskService(
         return taskDAO.findDTOByIdTEST(id).map { t -> flatDTO(t) }.toObservable()
     }
 
-    fun updateRx(e: FlatTaskDTO): Observable<Int> {
+    fun updateRx(e: FlatTaskDTO): Observable<Task> {
         return Observable.fromCallable {
-            taskDAO.update(flatTaskDTO_ToTaks(e))
+            taskService.update(flatTaskDTO_ToTaks(e))
         }
     }
 }

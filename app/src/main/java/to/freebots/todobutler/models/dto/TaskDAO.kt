@@ -57,7 +57,7 @@ abstract class TaskDAO : BaseDAO<Task> {
     abstract fun findByRowId(rowId: Long): Task
 
     @Update
-    abstract fun updateAll(task: MutableList<Task>): MutableList<Int>
+    abstract fun updateAll(task: MutableList<Task>): Int
 
     @Transaction
     open fun deleteAllById(ids: List<Long>) {

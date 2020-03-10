@@ -7,11 +7,15 @@ import to.freebots.todobutler.models.entities.Attachment
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
+import to.freebots.todobutler.models.logic.StorageService
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // clean up
+        StorageService(application).nuke()
     }
 }

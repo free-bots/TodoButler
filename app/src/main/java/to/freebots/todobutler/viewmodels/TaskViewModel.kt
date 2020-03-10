@@ -182,8 +182,9 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     /**
      * makes a copy of the current task and adds it as a child to the parent task
      */
-    // todo fix -> not copy into parent with subtask
     fun copyIntoParent() {
+        // todo call update ! and when copy
+
         subscribe(flatTaskService.copyIntoParent(_current!!).subscribe { t: FlatTaskDTO? ->
             t?.let {
                 navigate(t)
@@ -193,6 +194,8 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
 
     fun createSubTask() {
+
+        // todo call update ! and when copy
 
         if (_current != null) {
             val default = FlatTaskDTO(

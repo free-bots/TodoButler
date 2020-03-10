@@ -17,9 +17,7 @@ class TaskService(application: Application, private val labelService: LabelServi
     override fun findById(id: Long): Task = taskDAO.findById(id)
 
     override fun create(e: Task): Task {
-        // todo get the new entity
-        taskDAO.create(e)
-        return e
+        return taskDAO.findByRowId(taskDAO.create(e))
     }
 
     override fun update(e: Task): Task {
@@ -48,7 +46,7 @@ class TaskService(application: Application, private val labelService: LabelServi
         return taskDAO.insert(e).map { l -> findByRowId(l) }.toMutableList()
     }
 
-    fun updateAll(e: MutableList<Task>): MutableList<Int> {
+    fun updateAll(e: MutableList<Task>): Int {
         return taskDAO.updateAll(e)
     }
 }
