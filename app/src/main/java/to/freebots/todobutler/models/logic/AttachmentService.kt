@@ -2,10 +2,12 @@ package to.freebots.todobutler.models.logic
 
 import android.app.Application
 import android.net.Uri
+import io.reactivex.Observable
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.Attachment
 
-class AttachmentService(application: Application, private val storageService: StorageService) : BaseLogicService<Attachment>(application) {
+class AttachmentService(application: Application, private val storageService: StorageService) :
+    BaseLogicService<Attachment>(application) {
 
     override fun findAll(): MutableList<Attachment> = attachmentDAO.findAll()
 
@@ -34,10 +36,25 @@ class AttachmentService(application: Application, private val storageService: St
 
     override fun delete(e: Attachment): Attachment {
         attachmentDAO.delete(e)
+        storageService.removeFile(e.path)
         return e
     }
 
     fun deleteAllByIds(id: List<Long>) {
 
+    }
+
+    fun createRx(uri: Uri, taskId: Long): Observable<Attachment> {
+        return Observable.fromCallable {
+            val originalName = storageService.fileName(uri)
+            val innerFileName = storageService.saveFile(uri)
+            create(Attachment(taskId, originalName, innerFileName))
+        }
+    }
+
+    fun deleteRx(e: Attachment): Observable<Attachment> {
+        return Observable.fromCallable {
+            delete(e)
+        }
     }
 }

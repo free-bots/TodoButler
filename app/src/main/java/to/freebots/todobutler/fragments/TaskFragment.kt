@@ -84,7 +84,15 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 return true
             }
             R.id.menu_attachment -> {
-                findNavController().navigate(R.id.action_taskFragment_to_attachmentFragment)
+                arguments?.let { arg ->
+                    arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                        val bundle = Bundle().apply { putParcelable("flatTaskDTO", flatTaskDTO) }
+                        findNavController().navigate(
+                            R.id.action_taskFragment_to_attachmentFragment,
+                            bundle
+                        )
+                    }
+                }
                 return true
             }
             else -> {
@@ -162,10 +170,10 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
         if (rv_tasks.adapter == null) {
-                rv_tasks.adapter = TasksAdapter().apply {
-                    action = this@TaskFragment
-                    tasks = subTasks
-                }
+            rv_tasks.adapter = TasksAdapter().apply {
+                action = this@TaskFragment
+                tasks = subTasks
+            }
         }
     }
 
