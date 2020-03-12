@@ -11,6 +11,7 @@ class Attachment(
     var taskId: Long,
     var name: String,
     var path: String,
+    // todo add file extension
     id: Long? = 0,
     createdAt: Date? = null,
     updatedAt: Date? = null
@@ -23,8 +24,7 @@ class Attachment(
         parcel.readValue(Long::class.java.classLoader) as Long?,
         parcel.readValue(Date::class.java.classLoader) as Date?,
         parcel.readValue(Date::class.java.classLoader) as Date?
-        ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(taskId)

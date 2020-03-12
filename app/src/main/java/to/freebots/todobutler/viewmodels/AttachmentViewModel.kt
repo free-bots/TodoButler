@@ -2,6 +2,8 @@ package to.freebots.todobutler.viewmodels
 
 import android.app.Application
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import to.freebots.todobutler.models.entities.Attachment
 import to.freebots.todobutler.models.logic.AttachmentService
@@ -12,6 +14,10 @@ class AttachmentViewModel(application: Application) : BaseViewModel(application)
 
     private val attachmentService: AttachmentService =
         AttachmentService(application, StorageService(application))
+
+    private val _attachments: MutableLiveData<MutableList<Attachment>> = MutableLiveData()
+
+    val attachments: LiveData<MutableList<Attachment>> = _attachments
 
     fun importFile(uri: Uri?, taskId: Long) {
         if (uri == null) {
@@ -37,6 +43,12 @@ class AttachmentViewModel(application: Application) : BaseViewModel(application)
 
     override fun delete(e: Attachment) {
         subscribe(attachmentService.deleteRx(e).subscribe {})
+    }
+
+    fun getAttachmentsByTaskId(id: Long) {
+        subscribe(attachmentService.findAllByTaskId(id).subscribe { attachments: MutableList<Attachment> ->
+            _attachments.postValue(attachments)
+        })
     }
 
 }

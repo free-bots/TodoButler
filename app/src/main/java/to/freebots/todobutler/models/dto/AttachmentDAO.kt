@@ -3,6 +3,7 @@ package to.freebots.todobutler.models.dto
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Attachment
 
@@ -17,6 +18,9 @@ interface AttachmentDAO : BaseDAO<Attachment> {
 
     @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
     fun findAllByTaskId(taskId: Long): MutableList<Attachment>
+
+    @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
+    fun findAllByTaskIdFlowable(taskId: Long): Flowable<MutableList<Attachment>>
 
     @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
     fun findAllByTaskIdLiveData(taskId: Long): LiveData<MutableList<Attachment>>

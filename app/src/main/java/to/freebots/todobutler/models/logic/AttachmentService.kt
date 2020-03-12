@@ -57,4 +57,8 @@ class AttachmentService(application: Application, private val storageService: St
             delete(e)
         }
     }
+
+    fun findAllByTaskId(id: Long): Observable<MutableList<Attachment>> {
+        return attachmentDAO.findAllByTaskIdFlowable(id).toObservable()
+    }
 }
