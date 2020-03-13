@@ -20,8 +20,16 @@ class AttachmentService(application: Application, private val storageService: St
 
     fun createAll(e: MutableList<Attachment>): MutableList<Attachment> {
         //todo call file service to copy files
-//        storageService.saveAllFiles(e.map { attachment -> Uri.parse(attachment.path) }.toMutableList())
-        return e
+        val paths =
+            storageService.makeCopyOfAllFiles(e.map { attachment -> attachment.path }.toMutableList())
+        val copy = e.mapIndexed { index, attachment ->
+            attachment.id = null
+            attachment.path = paths[index]
+            attachment
+        }.toMutableList()
+
+        return attachmentDAO.createAll(copy).map { attachmentDAO.findByRowIndex(it) }
+            .toMutableList()
     }
 
     override fun update(e: Attachment): Attachment {
@@ -61,4 +69,18 @@ class AttachmentService(application: Application, private val storageService: St
     fun findAllByTaskId(id: Long): Observable<MutableList<Attachment>> {
         return attachmentDAO.findAllByTaskIdFlowable(id).toObservable()
     }
+
+    /**
+     * size in bytes
+     */
+    fun attachmentSizeOfTask(taskId: Long): Long {
+        return attachmentDAO.findAllByTaskId(taskId).map {
+            storageService.file(it.path).length()
+        }.sum()
+    }
+
+    fun copyPossible(taskId: Long): Boolean =
+        storageService.freeSpace() > (attachmentSizeOfTask(taskId) * StorageService.SPACE_BUFFER)
+
+
 }

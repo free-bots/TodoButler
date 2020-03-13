@@ -4,11 +4,11 @@ import android.app.Application
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.functions.Function
-import kotlinx.coroutines.GlobalScope
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
+import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
 
@@ -136,6 +136,11 @@ class FlatTaskService(
      */
     fun copyIntoParent(e: FlatTaskDTO): Observable<FlatTaskDTO> {
         return Observable.fromCallable {
+
+            if (!attachmentService.copyPossible(e.id!!)) {
+                throw Exception("no space available")
+            }
+
             e.description = UUID.randomUUID().toString() + LocalDateTime.now().toString()
             val copy = copy(e, FlatTaskDTO::class.java) as FlatTaskDTO
 
@@ -150,18 +155,24 @@ class FlatTaskService(
     }
 
 
+    private fun saveCopy(e: FlatTaskDTO, task: Task?, tasks: MutableList<Task>): Task {
 
-    private fun saveCopy(e: FlatTaskDTO, task : Task?, tasks: MutableList<Task>): Task {
-
-        // todo add other dependencies... attachments ....
         var flat = flatTaskDTO_ToTaks(e)
         flat.id = null
         flat.parentTaskId = task?.id
         flat = taskService.create(flat)
         tasks.add(flat)
 
+        val attachmentCopy = e.attachments.map {
+            it.taskId = flat.id!!
+            it
+        }.toMutableList()
+
+        // todo add other dependencies... attachments ....
+        attachmentService.createAll(attachmentCopy)
+
         e.subTasks.forEach { t: FlatTaskDTO -> saveCopy(t, flat, tasks) }
-        return  flat
+        return flat
     }
 
     private fun tasksToDelete(e: FlatTaskDTO): MutableList<Long> {
@@ -217,7 +228,12 @@ class FlatTaskService(
         return tasks
     }
 
-    private fun flattenFlatTaskDTO1(e: FlatTaskDTO, tasks: MutableList<FlatTaskDTO>, id: Long, parentId: Long?) {
+    private fun flattenFlatTaskDTO1(
+        e: FlatTaskDTO,
+        tasks: MutableList<FlatTaskDTO>,
+        id: Long,
+        parentId: Long?
+    ) {
         val subTasks = e.subTasks
         if (subTasks.isEmpty()) {
             e.id = id
@@ -229,7 +245,6 @@ class FlatTaskService(
             flattenFlatTaskDTO1(it, tasks, id - 1, id)
         }
     }
-
 
 
     /**

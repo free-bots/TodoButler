@@ -2,6 +2,7 @@ package to.freebots.todobutler.models.dto
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
@@ -27,4 +28,7 @@ interface AttachmentDAO : BaseDAO<Attachment> {
 
     @Query("SELECT * FROM Attachment WHERE rowid=:rowIndex")
     fun findByRowIndex(rowIndex: Long): Attachment
+
+    @Insert
+    fun createAll(attachments: MutableList<Attachment>): MutableList<Long>
 }

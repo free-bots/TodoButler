@@ -15,6 +15,7 @@ class StorageService(private val application: Application) {
 
     companion object {
         const val FILES_ROOT = "/tasks"
+        const val SPACE_BUFFER = 1.10
     }
 
     init {
@@ -23,7 +24,7 @@ class StorageService(private val application: Application) {
 
     fun saveFile(uri: Uri): String {
 
-        val file = File(storage().path, UUID.randomUUID().toString())
+        val file = file(UUID.randomUUID().toString())
 
         application.contentResolver.openInputStream(uri).use { inputStream: InputStream? ->
             inputStream?.readBytes()?.let {
@@ -49,14 +50,24 @@ class StorageService(private val application: Application) {
         return ""
     }
 
-    fun makeCopyOfAllFiles(uris: MutableList<Uri>): String {
+    fun makeCopyOfAllFiles(paths: MutableList<String>): MutableList<String> {
+        return paths.map { path: String ->
+            val file = file(path)
+            val copy = file(UUID.randomUUID().toString())
 
-        return ""
+            if (!file.exists()) {
+                throw Exception()
+            }
+
+            copy.writeBytes(file.readBytes())
+
+            copy.name
+        }.toMutableList()
     }
 
 
     fun removeFile(fileName: String) {
-        val file = File(storage(), fileName)
+        val file = file(fileName)
 
         if (!file.exists() || file.delete()) {
             throw Exception("error")
@@ -82,4 +93,8 @@ class StorageService(private val application: Application) {
     }
 
     fun fileName(uri: Uri): String = uri.lastPathSegment!!.substringAfterLast("/")
+
+    fun freeSpace(): Long = storage().freeSpace
+
+    fun file(name: String) = File(storage(), name)
 }
