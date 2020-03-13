@@ -12,6 +12,8 @@ import to.freebots.todobutler.models.logic.StorageService
 class AttachmentViewModel(application: Application) : BaseViewModel(application),
     BaseOperations<Attachment> {
 
+    var selectedAttachment: MutableLiveData<Attachment> = MutableLiveData()
+
     private val attachmentService: AttachmentService =
         AttachmentService(application, StorageService(application))
 

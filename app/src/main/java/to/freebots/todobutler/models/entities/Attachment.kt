@@ -12,7 +12,7 @@ class Attachment(
     var name: String,
     var path: String,
     // todo add file extension
-    id: Long? = 0,
+    id: Long? = null,
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) :

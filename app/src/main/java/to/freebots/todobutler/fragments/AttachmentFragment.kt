@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.content_attachments.*
+import kotlinx.android.synthetic.main.fragment_attachment.*
 
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.AttachmentsAdapter
@@ -35,6 +37,14 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
         ).get(AttachmentViewModel::class.java)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        taskId()?.let {
+            viewModel.getAttachmentsByTaskId(it)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,7 +65,9 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
                 adapter.attachments = attachments
             })
 
-        exportFile()
+        rv_attachments.adapter = adapter
+
+        addListener()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,6 +86,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
             FILE_CREATE_REQUEST -> {
                 if (resultCode == Activity.RESULT_OK) {
                     data?.data?.let {
+                        //                        val attachment = viewModel.selectedAttachment.value
                         // todo write data
                     }
                 }
@@ -109,6 +122,13 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
     }
 
     override fun open(attachment: Attachment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        exportFile()
+        viewModel.selectedAttachment.postValue(attachment)
+    }
+
+    private fun addListener() {
+        addAttachmentFab.setOnClickListener {
+            importFile()
+        }
     }
 }

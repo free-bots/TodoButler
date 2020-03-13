@@ -3,6 +3,8 @@ package to.freebots.todobutler.adapters.label
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import to.freebots.todobutler.R
 import to.freebots.todobutler.models.entities.Attachment
@@ -39,7 +41,7 @@ class AttachmentsAdapter : RecyclerView.Adapter<AttachmentsAdapter.AttachmentHol
     }
 
     override fun onBindViewHolder(holder: AttachmentHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder.bind()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -79,6 +81,8 @@ class AttachmentsAdapter : RecyclerView.Adapter<AttachmentsAdapter.AttachmentHol
     }
 
     class AttachmentHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var icon: ImageView = itemView.findViewById(R.id.icon)
+        var name: TextView = itemView.findViewById(R.id.name)
 
         fun setListener(
             clickListener: View.OnClickListener,
@@ -86,6 +90,11 @@ class AttachmentsAdapter : RecyclerView.Adapter<AttachmentsAdapter.AttachmentHol
         ) {
             itemView.setOnClickListener(clickListener)
             itemView.setOnLongClickListener(longClickListener)
+        }
+
+        fun bind() {
+            this.name.text = "DEMO"
+            this.icon.setImageResource(R.drawable.ic_add_24px)
         }
     }
 }
