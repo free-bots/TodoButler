@@ -61,7 +61,6 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
         viewModel.attachments.observe(
             viewLifecycleOwner,
             Observer { attachments: MutableList<Attachment> ->
-                // todo update recycler
                 adapter.attachments = attachments
             })
 

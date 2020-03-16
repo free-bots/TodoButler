@@ -56,7 +56,7 @@ class AttachmentService(application: Application, private val storageService: St
         return Observable.fromCallable {
             val originalName = storageService.fileName(uri)
             val innerFileName = storageService.saveFile(uri)
-            create(Attachment(taskId, originalName, innerFileName))
+            create(Attachment(taskId, originalName, innerFileName, "TODO!"))
         }
     }
 

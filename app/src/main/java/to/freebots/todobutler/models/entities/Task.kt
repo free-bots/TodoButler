@@ -11,6 +11,8 @@ class Task(
     var name: String,
     var description: String,
     var isCompleted: Boolean,
+//    var location: Location?,
+    var color: String,
     id: Long? = 0,
     createdAt: Date? = null,
     updatedAt: Date? = null

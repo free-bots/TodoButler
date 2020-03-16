@@ -204,6 +204,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 "NEW",
                 "DESC ${_current!!.id}",
                 false,
+                _current!!.color,
                 mutableListOf(),
                 mutableListOf(),
                 null
@@ -229,7 +230,17 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
     fun createDefaultFlatTask(label: Label): Observable<FlatTaskDTO> {
         val default =
-            FlatTaskDTO(label, null, "NEW", "DESC", false, mutableListOf(), mutableListOf(), null)
+            FlatTaskDTO(
+                label,
+                null,
+                "NEW",
+                "DESC",
+                false,
+                "",
+                mutableListOf(),
+                mutableListOf(),
+                null
+            )
         return flatTaskService.createAsync(default).doOnError(errorHandler)
     }
 

@@ -90,6 +90,7 @@ class FlatTaskService(
             name = taskDTO.task.name,
             description = taskDTO.task.description,
             isCompleted = taskDTO.task.isCompleted,
+            color = taskDTO.task.color,
             createdAt = taskDTO.task.createdAt,
             updatedAt = taskDTO.task.updatedAt,
             id = taskDTO.task.id,
@@ -124,6 +125,7 @@ class FlatTaskService(
             e.name,
             e.description,
             e.isCompleted,
+            e.color,
             e.id,
             e.createdAt,
             e.updatedAt

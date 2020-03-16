@@ -11,7 +11,7 @@ class Attachment(
     var taskId: Long,
     var name: String,
     var path: String,
-    // todo add file extension
+    var extension: String,
     id: Long? = null,
     createdAt: Date? = null,
     updatedAt: Date? = null
@@ -19,6 +19,7 @@ class Attachment(
     BaseEntity(id, createdAt, updatedAt), Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readValue(Long::class.java.classLoader) as Long?,
@@ -30,6 +31,7 @@ class Attachment(
         parcel.writeLong(taskId)
         parcel.writeString(name)
         parcel.writeString(path)
+        parcel.writeString(extension)
         parcel.writeValue(id)
         parcel.writeValue(createdAt)
         parcel.writeValue(updatedAt)
