@@ -70,4 +70,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'com.github.dhaval2404:colorpicker:1.0'
 }

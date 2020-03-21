@@ -3,6 +3,7 @@ package to.freebots.todobutler.fragments
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
@@ -13,16 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
+import com.github.dhaval2404.colorpicker.model.ColorShape
+import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_task.*
-import kotlinx.android.synthetic.main.fragment_tasks_from_label.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.databinding.FragmentTaskBinding
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.viewmodels.TaskViewModel
-import java.lang.Thread.sleep
 import java.time.LocalDateTime
 
 
@@ -68,7 +69,17 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 return true
             }
             R.id.menu_color -> {
-
+                val defaultColor = this.viewModel.color.value?: run { "" }
+                MaterialColorPickerDialog
+                    .Builder(activity!!)                        // Pass Activity Instance
+                    .setColorShape(ColorShape.SQAURE)    // Default ColorShape.CIRCLE
+                    .setColorSwatch(ColorSwatch._300)    // Default ColorSwatch._500
+                    .setDefaultColor(defaultColor)
+                    .setColorListener { color, colorHex ->
+                        // Handle Color Selection
+                        this.viewModel.color.postValue(colorHex)
+                    }
+                    .show()
                 return true
             }
             R.id.menu_location -> {
@@ -147,6 +158,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 }
             }
         })
+
+        applyColor()
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {
@@ -204,5 +217,15 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     override fun onDetach() {
         super.onDetach()
         viewModel.update()
+    }
+
+    private fun applyColor() {
+        this.viewModel.color.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty()) {
+            return@Observer
+            }
+
+            task_root.setBackgroundColor(Color.parseColor(it))
+        })
     }
 }

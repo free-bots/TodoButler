@@ -7,7 +7,9 @@
             name="model"
             type="to.freebots.todobutler.viewmodels.TaskViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/task_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.TaskFragment">
@@ -49,21 +51,20 @@
 
         <include
             android:id="@+id/vs_sub_tasks"
+            layout="@layout/content_tasks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/content_tasks"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_desc">
-        </include>
-<!--        <ViewStub-->
-<!--            android:id="@+id/vs_sub_tasks"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout="@layout/content_tasks"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/et_desc" />-->
+            app:layout_constraintTop_toBottomOf="@+id/et_desc"></include>
+        <!--        <ViewStub-->
+        <!--            android:id="@+id/vs_sub_tasks"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout="@layout/content_tasks"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/et_desc" />-->
 
         <TextView
             android:id="@+id/tv_date"
@@ -86,8 +87,8 @@
             android:id="@+id/sw_completed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="completed"
             android:checked="@={model.isCompleted}"
+            android:text="completed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/vs_sub_tasks" />

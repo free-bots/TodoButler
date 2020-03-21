@@ -31,7 +31,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     val description: MutableLiveData<String> = MutableLiveData()
     val isCompleted: MutableLiveData<Boolean> = MutableLiveData()
     val subTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
-
+    val color: MutableLiveData<String> = MutableLiveData()
 
     // navigate on new subTasks, clone ....
     val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
@@ -170,6 +170,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.name = name.value!!
         _current?.description = description.value!!
         _current?.isCompleted = isCompleted.value!!
+        _current?.color = color.value!!
 
         subscribe(flatTaskService.updateRx(_current!!)
             .subscribe {
@@ -269,6 +270,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         description.postValue(flatTaskDTO.description)
         isCompleted.postValue(flatTaskDTO.isCompleted)
         subTasks.postValue(flatTaskDTO.subTasks)
+        color.postValue(flatTaskDTO.color)
     }
 
     open class EventWrapper<E>(var e: E?, val navigateUp: Boolean = false)
