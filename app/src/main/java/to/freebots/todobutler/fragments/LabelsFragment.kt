@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,6 @@ import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.LabelsAdapter
-import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.viewmodels.LabelViewModel
 
@@ -62,8 +60,11 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         rv_label.adapter = labelsAdapter
 
         addLabelFab.setOnClickListener {
-            Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
-            showInfoOfLabel(Label("new"))
+
+            findNavController().navigate(R.id.action_labelsFragment_to_tasksFragment)
+
+//            Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
+//            showInfoOfLabel(Label("new"))
         }
 
 
