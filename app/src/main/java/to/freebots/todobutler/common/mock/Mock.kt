@@ -69,7 +69,7 @@ class Mock {
             val labels: MutableList<Label> = mutableListOf()
 
             for (i in 0..100) {
-                labels.add(createLabel(labelDAO, Label("# $i")))
+                labels.add(createLabel(labelDAO, Label("# $i", "")))
             }
 
             return labels
@@ -106,19 +106,17 @@ class Mock {
 
 
         val listOfLabels = mutableListOf(
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo"),
-            Label("Todo")
+            Label("Todo",""),
+            Label("Todo",""),
+            Label("Todo",""),
+            Label("Todo",""),
+            Label("Todo","")
         )
 
 
         val listOfFlatTaskDTO = mutableListOf(
             FlatTaskDTO(
-                Label("label name"),
+                Label("label name",""),
                 null,
                 "name",
                 "desc",
@@ -130,7 +128,7 @@ class Mock {
                 id = 10
             ),
             FlatTaskDTO(
-                Label("label name"),
+                Label("label name", ""),
                 null,
                 "name",
                 "desc",
@@ -142,7 +140,7 @@ class Mock {
                 id = 11
             ),
             FlatTaskDTO(
-                Label("label name"),
+                Label("label name", ""),
                 null,
                 "name",
                 "desc",
@@ -154,7 +152,7 @@ class Mock {
                 id = 12
             ),
             FlatTaskDTO(
-                Label("label name"),
+                Label("label name", ""),
                 null,
                 "name",
                 "desc",
@@ -163,7 +161,7 @@ class Mock {
                 "",
                 mutableListOf(
                     FlatTaskDTO(
-                        Label("label name"),
+                        Label("label name", ""),
                         13,
                         "name",
                         "desc",
@@ -179,7 +177,7 @@ class Mock {
                 id = 13
             ),
             FlatTaskDTO(
-                Label("label name"),
+                Label("label name", ""),
                 null,
                 "name",
                 "desc",
@@ -188,7 +186,7 @@ class Mock {
                 "",
                 mutableListOf(
                     FlatTaskDTO(
-                        Label("label name"),
+                        Label("label name", ""),
                         15,
                         "name",
                         "desc",
@@ -197,7 +195,7 @@ class Mock {
                         "",
                         mutableListOf(
                             FlatTaskDTO(
-                                Label("label name"),
+                                Label("label name", ""),
                                 16,
                                 "name",
                                 "desc",
@@ -206,7 +204,7 @@ class Mock {
                                 "",
                                 mutableListOf(
                                     FlatTaskDTO(
-                                        Label("label name"),
+                                        Label("label name", ""),
                                         17,
                                         "name",
                                         "desc",
@@ -232,7 +230,7 @@ class Mock {
         )
 
         var flatTaskDTOWithSubTask = FlatTaskDTO(
-            Label("label name"),
+            Label("label name", ""),
             null,
             "name",
             "desc",
