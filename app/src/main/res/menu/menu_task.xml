@@ -8,6 +8,9 @@
         android:id="@+id/menu_color"
         android:title="Color" />
     <item
+        android:id="@+id/menu_pinned"
+        android:title="Pinned" />
+    <item
         android:id="@+id/menu_location"
         android:title="Location" />
     <item

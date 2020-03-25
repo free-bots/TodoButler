@@ -82,6 +82,10 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                     .show()
                 return true
             }
+            R.id.menu_pinned -> {
+                this.viewModel.isPinned.postValue(!this.viewModel.isPinned.value!!)
+                return true
+            }
             R.id.menu_location -> {
                 // TODO show location fragment
                 return true
@@ -160,6 +164,11 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         })
 
         applyColor()
+
+        viewModel.isPinned.observe(viewLifecycleOwner, Observer {
+            // todo set icon and text on menu
+            // todo notification service
+        })
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {

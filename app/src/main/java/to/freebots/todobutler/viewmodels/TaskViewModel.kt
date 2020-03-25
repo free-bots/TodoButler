@@ -34,6 +34,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     val name: MutableLiveData<String> = MutableLiveData()
     val description: MutableLiveData<String> = MutableLiveData()
     val isCompleted: MutableLiveData<Boolean> = MutableLiveData()
+    val isPinned: MutableLiveData<Boolean> = MutableLiveData()
     val subTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
     val color: MutableLiveData<String> = MutableLiveData()
 
@@ -207,6 +208,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.name = name.value!!
         _current?.description = description.value!!
         _current?.isCompleted = isCompleted.value!!
+        _current?.isPinned = isPinned.value!!
         _current?.color = color.value!!
 
         subscribe(flatTaskService.updateRx(_current!!)
@@ -242,6 +244,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 "NEW",
                 "DESC ${_current!!.id}",
                 false,
+                false,
                 _current!!.color,
                 mutableListOf(),
                 mutableListOf(),
@@ -273,6 +276,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 null,
                 "NEW",
                 "DESC",
+                false,
                 false,
                 "",
                 mutableListOf(),
@@ -306,6 +310,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         name.postValue(flatTaskDTO.name)
         description.postValue(flatTaskDTO.description)
         isCompleted.postValue(flatTaskDTO.isCompleted)
+        isPinned.postValue(flatTaskDTO.isPinned)
         subTasks.postValue(flatTaskDTO.subTasks)
         color.postValue(flatTaskDTO.color)
     }

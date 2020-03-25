@@ -11,6 +11,7 @@ class FlatTaskDTO(
     var name: String,
     var description: String,
     var isCompleted: Boolean,
+    var isPinned: Boolean,
     var color: String,
     var subTasks: MutableList<FlatTaskDTO>,
     var attachments: MutableList<Attachment>,
@@ -24,6 +25,7 @@ class FlatTaskDTO(
         parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
         parcel.readParcelableArray(FlatTaskDTO::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<FlatTaskDTO>,
@@ -39,6 +41,7 @@ class FlatTaskDTO(
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeByte(if (isCompleted) 1 else 0)
+        parcel.writeByte(if (isPinned) 1 else 0)
         parcel.writeString(color)
         parcel.writeParcelableArray(subTasks.toTypedArray(), flags)
         parcel.writeParcelableArray(attachments.toTypedArray(), flags)
