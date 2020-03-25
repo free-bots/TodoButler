@@ -61,7 +61,8 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
         addLabelFab.setOnClickListener {
 
-            findNavController().navigate(R.id.action_labelsFragment_to_tasksFragment)
+//            findNavController().navigate(R.id.action_labelsFragment_to_tasksFragment)
+            findNavController().navigate(R.id.action_labelsFragment_to_searchTasksFragment)
 
 //            Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
 //            showInfoOfLabel(Label("new"))

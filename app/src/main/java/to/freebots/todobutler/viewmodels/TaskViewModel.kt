@@ -1,9 +1,13 @@
 package to.freebots.todobutler.viewmodels
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
@@ -105,6 +109,39 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     private val _flatTasks = MutableLiveData<MutableList<FlatTaskDTO>>()
 
     val flatTasks = _flatTasks
+
+    val searchedTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
+    var searchQuery: MutableLiveData<String> = MutableLiveData()
+
+    @SuppressLint("DefaultLocale")
+    fun search(query: String) {
+        val trimQuery = query.trim().toLowerCase()
+
+        if (trimQuery.isEmpty()) {
+            this.searchedTasks.postValue(mutableListOf())
+            return
+        }
+
+        val gson = Gson()
+
+        this._flatTasks.value?.let {
+            this.searchedTasks.postValue(
+                it.filter { task ->
+                    val str = gson.toJson(task).toLowerCase()
+                    str.contains(trimQuery)
+                }.toMutableList()
+            )
+        }
+
+
+        this.searchedTasks.value?.let {
+            println(it.size)
+        }
+
+        var test = this.searchedTasks.value
+
+        println()
+    }
 
     override fun fetchAll() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
