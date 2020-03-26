@@ -9,7 +9,7 @@ import java.util.*
 @Entity
 class Label(
     var name: String,
-    val icon: String,
+    var icon: String,
     id: Long? = null,
     createdAt: Date? = null,
     updatedAt: Date? = null

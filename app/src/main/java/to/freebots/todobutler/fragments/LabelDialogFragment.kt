@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_label_info.*
+import kotlinx.android.synthetic.main.layout_task_item.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.models.entities.Label
 
@@ -40,6 +41,25 @@ class LabelDialogFragment : BottomSheetDialogFragment() {
                 deleted = true
                 editListener?.delete(itLabel)
                 dismiss()
+            }
+        }
+
+        label?.let {
+            if(it.icon.isEmpty().not()) {
+                labelIconIV.setImageResource(it.icon.toInt())
+            }
+        }
+
+        labelIconIV.setOnClickListener {
+            activity?.supportFragmentManager?.let {
+                IconChooserFragment
+                    .instance(object :IconChooserFragment.SelectionListener{
+                        override fun onIcon(icon: String) {
+                            label?.icon = icon
+                            labelIconIV.setImageResource(icon.toInt())
+                        }
+                    })
+                    .show(it, "iconChooser")
             }
         }
     }
