@@ -41,7 +41,8 @@ class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>(), View.On
 
     override fun onBindViewHolder(holder: LabelHolder, position: Int) {
         holder.bind(
-            labels[position].name
+            labels[position].name,
+            labels[position].icon.toIntOrNull() ?: run { 0 }
         )
     }
 
@@ -59,10 +60,11 @@ class LabelsAdapter : RecyclerView.Adapter<LabelsAdapter.LabelHolder>(), View.On
         }
 
         fun bind(
-            name: String
+            name: String,
+            icon: Int
         ) {
             this.name.text = name
-            this.icon.setImageResource(R.drawable.ic_add_24px)
+            this.icon.setImageResource(icon)
         }
     }
 

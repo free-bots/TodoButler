@@ -169,6 +169,10 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             // todo set icon and text on menu
             // todo notification service
         })
+
+        viewModel.labelIcon.observe(viewLifecycleOwner, Observer {
+            imageView.setImageResource(it)
+        })
     }
 
     private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {

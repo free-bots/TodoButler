@@ -40,7 +40,11 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
     }
 
     override fun onBindViewHolder(holder: TaskHolder, position: Int) {
-        holder.bind("hi")
+        holder.bind(
+            tasks[position].name,
+            "",
+            tasks[position].label.icon.toIntOrNull() ?: run { 0 }
+        )
     }
 
     class TaskHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,11 +62,12 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
 
         fun bind(
             info: String,
-            time: String? = null
+            time: String? = null,
+            icon: Int
         ) {
             this.info.text = info
             this.time.text = time
-            this.icon.setImageResource(R.drawable.ic_add_24px)
+            this.icon.setImageResource(icon)
         }
     }
 

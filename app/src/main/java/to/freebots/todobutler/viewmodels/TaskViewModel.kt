@@ -2,7 +2,10 @@ package to.freebots.todobutler.viewmodels
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import androidx.appcompat.graphics.drawable.DrawableWrapper
+import androidx.appcompat.widget.DrawableUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -41,6 +44,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     // navigate on new subTasks, clone ....
     val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
 
+    val labelIcon: MutableLiveData<Int> = MutableLiveData(0)
 
     val _task: MutableLiveData<FlatTaskDTO> = MutableLiveData()
 
@@ -313,6 +317,10 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         isPinned.postValue(flatTaskDTO.isPinned)
         subTasks.postValue(flatTaskDTO.subTasks)
         color.postValue(flatTaskDTO.color)
+
+        if (flatTaskDTO.label.icon.isEmpty().not()) {
+            labelIcon.postValue(flatTaskDTO.label.icon.toInt())
+        }
     }
 
     open class EventWrapper<E>(var e: E?, val navigateUp: Boolean = false)
