@@ -15,6 +15,12 @@ data class TaskDTO(
     var label: Label,
 
     @Relation(
+        parentColumn = "locationId",
+        entityColumn = "id"
+    )
+    var location: Location?,
+
+    @Relation(
         parentColumn = "id",
         entityColumn = "parentTaskId"
     )

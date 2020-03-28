@@ -8,7 +8,6 @@ import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
-import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
 
@@ -91,6 +90,7 @@ class FlatTaskService(
             description = taskDTO.task.description,
             isCompleted = taskDTO.task.isCompleted,
             isPinned = taskDTO.task.isPinned,
+            location = taskDTO.location,
             color = taskDTO.task.color,
             createdAt = taskDTO.task.createdAt,
             updatedAt = taskDTO.task.updatedAt,
@@ -127,6 +127,7 @@ class FlatTaskService(
             e.description,
             e.isCompleted,
             e.isPinned,
+            e.location?.id,
             e.color,
             e.id,
             e.createdAt,

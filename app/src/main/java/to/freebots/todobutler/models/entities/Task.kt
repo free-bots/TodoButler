@@ -12,7 +12,8 @@ class Task(
     var description: String,
     var isCompleted: Boolean,
     var isPinned: Boolean,
-//    var location: Location?,
+    var locationId: Long?,
+//    var reminderId: Long?,
     var color: String,
     id: Long? = 0,
     createdAt: Date? = null,
@@ -20,4 +21,4 @@ class Task(
 ) :
     BaseEntity(id, createdAt, updatedAt) {
 }
-// TODO: location, reminder
+// TODO: location, reminder, priority

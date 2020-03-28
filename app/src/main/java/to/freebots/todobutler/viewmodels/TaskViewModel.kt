@@ -2,14 +2,9 @@ package to.freebots.todobutler.viewmodels
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.graphics.drawable.BitmapDrawable
 import android.util.Log
-import androidx.appcompat.graphics.drawable.DrawableWrapper
-import androidx.appcompat.widget.DrawableUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
@@ -18,6 +13,7 @@ import to.freebots.todobutler.common.Event
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Label
+import to.freebots.todobutler.models.entities.Location
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.logic.*
 
@@ -40,6 +36,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     val isPinned: MutableLiveData<Boolean> = MutableLiveData()
     val subTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
     val color: MutableLiveData<String> = MutableLiveData()
+    val location: MutableLiveData<Location?> = MutableLiveData()
 
     // navigate on new subTasks, clone ....
     val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
@@ -214,6 +211,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.isCompleted = isCompleted.value!!
         _current?.isPinned = isPinned.value!!
         _current?.color = color.value!!
+        _current?.location = location.value
 
         subscribe(flatTaskService.updateRx(_current!!)
             .subscribe {
@@ -249,6 +247,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 "DESC ${_current!!.id}",
                 false,
                 false,
+                null,
                 _current!!.color,
                 mutableListOf(),
                 mutableListOf(),
@@ -282,6 +281,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 "DESC",
                 false,
                 false,
+                null,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -317,6 +317,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         isPinned.postValue(flatTaskDTO.isPinned)
         subTasks.postValue(flatTaskDTO.subTasks)
         color.postValue(flatTaskDTO.color)
+        location.postValue(flatTaskDTO.location)
 
         if (flatTaskDTO.label.icon.isEmpty().not()) {
             labelIcon.postValue(flatTaskDTO.label.icon.toInt())

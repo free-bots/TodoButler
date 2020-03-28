@@ -11,13 +11,15 @@ import kotlinx.coroutines.launch
 import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.dto.AttachmentDAO
 import to.freebots.todobutler.models.dto.LabelDAO
+import to.freebots.todobutler.models.dto.LocationDAO
 import to.freebots.todobutler.models.dto.TaskDAO
 import to.freebots.todobutler.models.entities.Attachment
 import to.freebots.todobutler.models.entities.Label
+import to.freebots.todobutler.models.entities.Location
 import to.freebots.todobutler.models.entities.Task
 
 @androidx.room.Database(
-    entities = [Task::class, Label::class, Attachment::class],
+    entities = [Task::class, Label::class, Attachment::class, Location::class],
     version = 1,
     exportSchema = false
 )
@@ -27,6 +29,7 @@ abstract class Database : RoomDatabase() {
     abstract fun labelDAO(): LabelDAO
     abstract fun attachmentDAO(): AttachmentDAO
     abstract fun taskDAO(): TaskDAO
+    abstract fun locationDAO(): LocationDAO
 
     private class DatabaseCallback(
         private val scope: CoroutineScope
