@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_taskFragment_to_attachmentFragment"
             app:destination="@id/attachmentFragment" />
+        <action
+            android:id="@+id/action_taskFragment_to_locationFragment"
+            app:destination="@id/locationFragment" />
     </fragment>
     <fragment
         android:id="@+id/attachmentFragment"
@@ -63,4 +66,9 @@
             android:id="@+id/action_searchTasksFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="to.freebots.todobutler.fragments.LocationFragment"
+        android:label="fragment_location"
+        tools:layout="@layout/fragment_location" />
 </navigation>
