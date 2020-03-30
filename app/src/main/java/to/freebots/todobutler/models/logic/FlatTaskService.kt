@@ -14,7 +14,9 @@ import java.util.*
 class FlatTaskService(
     application: Application,
     private val taskService: TaskService,
-    private val attachmentService: AttachmentService
+    private val attachmentService: AttachmentService,
+    private val locationService: LocationService,
+    private val reminderService: ReminderService
 ) :
     BaseLogicService<FlatTaskDTO>(application) {
 

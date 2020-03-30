@@ -11,10 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import to.freebots.todobutler.common.Event
 import to.freebots.todobutler.common.logic.BaseLogicService
-import to.freebots.todobutler.models.entities.FlatTaskDTO
-import to.freebots.todobutler.models.entities.Label
-import to.freebots.todobutler.models.entities.Location
-import to.freebots.todobutler.models.entities.Task
+import to.freebots.todobutler.models.entities.*
 import to.freebots.todobutler.models.logic.*
 
 class TaskViewModel(application: Application) : BaseViewModel(application), BaseOperations<Task>,
@@ -37,6 +34,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     val subTasks: MutableLiveData<MutableList<FlatTaskDTO>> = MutableLiveData()
     val color: MutableLiveData<String> = MutableLiveData()
     val location: MutableLiveData<Location?> = MutableLiveData()
+    val reminder: MutableLiveData<Reminder?> = MutableLiveData()
 
     // navigate on new subTasks, clone ....
     val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
@@ -55,7 +53,9 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         FlatTaskService(
             application,
             taskService,
-            AttachmentService(application, StorageService((application)))
+            AttachmentService(application, StorageService((application))),
+            LocationService(application),
+            ReminderService(application)
         )
     }
 

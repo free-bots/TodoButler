@@ -27,14 +27,14 @@
 
         <EditText
             android:id="@+id/et_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@={model.name}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cb_completed"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <EditText
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine|textPersonName"
             android:text="@={model.description}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,15 +83,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_date" />
 
-        <Switch
-            android:id="@+id/sw_completed"
+<!--        <Switch-->
+<!--            android:id="@+id/sw_completed"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:checked="@={model.isCompleted}"-->
+<!--            android:text="completed"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/vs_sub_tasks" />-->
+
+        <CheckBox
+            android:id="@+id/cb_completed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:checked="@={model.isCompleted}"
-            android:text="completed"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vs_sub_tasks" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
