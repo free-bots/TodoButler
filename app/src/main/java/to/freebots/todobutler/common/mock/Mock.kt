@@ -23,29 +23,32 @@ class Mock {
             val labelId: Long = basicLabels[0].id!!
             // add mock data
 
-            val parentTask = createTask(taskDAO, Task(labelId, null, "parent", "parent", false, false,null,""))
+            val parentTask =
+                createTask(
+                    taskDAO,
+                    Task(labelId, null, "parent", "parent", false, false, null, null, "")
+                )
 
             val children = createSubTaskOf(
                 taskDAO, parentTask, listOf(
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, ""),
-                    Task(labelId, null, "child", "child", false,false, null, "")
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, ""),
+                    Task(labelId, null, "child", "child", false, false, null, null, "")
                 )
             )
 
             val parentId: Long = parentTask.id!!
-            val attachmentOfParent = createAttachment(attachmentDAO, Attachment(parentId, "", "", ""))
+            val attachmentOfParent =
+                createAttachment(attachmentDAO, Attachment(parentId, "", "", ""))
 
             val attachmentOfChild =
                 createAttachment(attachmentDAO, Attachment(children[0].id!!, "", "", ""))
@@ -53,10 +56,10 @@ class Mock {
 
             val childrenOfChildern = createSubTaskOf(
                 taskDAO, children[0], listOf(
-                    Task(basicLabels[1].id!!, null, "child", "child", false, false,null, ""),
-                    Task(basicLabels[1].id!!, null, "child", "child", false, false, null,""),
-                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null, ""),
-                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null,"")
+                    Task(basicLabels[1].id!!, null, "child", "child", false, false, null, null, ""),
+                    Task(basicLabels[1].id!!, null, "child", "child", false, false, null, null, ""),
+                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null, null, ""),
+                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null, null, "")
                 )
             )
         }
@@ -102,22 +105,23 @@ class Mock {
 
 
         val listOfLabels = mutableListOf(
-            Label("Todo",""),
-            Label("Todo",""),
-            Label("Todo",""),
-            Label("Todo",""),
-            Label("Todo","")
+            Label("Todo", ""),
+            Label("Todo", ""),
+            Label("Todo", ""),
+            Label("Todo", ""),
+            Label("Todo", "")
         )
 
 
         val listOfFlatTaskDTO = mutableListOf(
             FlatTaskDTO(
-                Label("label name",""),
+                Label("label name", ""),
                 null,
                 "name",
                 "desc",
                 false,
                 false,
+                null,
                 null,
                 "",
                 mutableListOf(),
@@ -132,6 +136,7 @@ class Mock {
                 false,
                 false,
                 null,
+                null,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -144,6 +149,7 @@ class Mock {
                 "desc",
                 false,
                 false,
+                null,
                 null,
                 "",
                 mutableListOf(),
@@ -158,6 +164,7 @@ class Mock {
                 false,
                 false,
                 null,
+                null,
                 "",
                 mutableListOf(
                     FlatTaskDTO(
@@ -167,6 +174,7 @@ class Mock {
                         "desc",
                         false,
                         false,
+                        null,
                         null,
                         "",
                         mutableListOf(),
@@ -185,6 +193,7 @@ class Mock {
                 false,
                 false,
                 null,
+                null,
                 "",
                 mutableListOf(
                     FlatTaskDTO(
@@ -194,6 +203,7 @@ class Mock {
                         "desc",
                         false,
                         false,
+                        null,
                         null,
                         "",
                         mutableListOf(
@@ -205,6 +215,7 @@ class Mock {
                                 false,
                                 false,
                                 null,
+                                null,
                                 "",
                                 mutableListOf(
                                     FlatTaskDTO(
@@ -214,6 +225,7 @@ class Mock {
                                         "desc",
                                         false,
                                         false,
+                                        null,
                                         null,
                                         "",
                                         mutableListOf(),
@@ -241,6 +253,7 @@ class Mock {
             "desc",
             false,
             false,
+            null,
             null,
             "",
             listOfFlatTaskDTO.map { flatTaskDTO ->

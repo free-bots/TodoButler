@@ -23,8 +23,9 @@ import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.databinding.FragmentTaskBinding
 import to.freebots.todobutler.models.entities.FlatTaskDTO
+import to.freebots.todobutler.models.entities.Reminder
 import to.freebots.todobutler.viewmodels.TaskViewModel
-import java.time.LocalDateTime
+import java.util.*
 
 
 /*
@@ -69,7 +70,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 return true
             }
             R.id.menu_color -> {
-                val defaultColor = this.viewModel.color.value?: run { "" }
+                val defaultColor = this.viewModel.color.value ?: run { "" }
                 MaterialColorPickerDialog
                     .Builder(activity!!)                        // Pass Activity Instance
                     .setColorShape(ColorShape.SQAURE)    // Default ColorShape.CIRCLE
@@ -145,10 +146,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             Toast.makeText(context, it.name, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.name.observe(viewLifecycleOwner, Observer { t ->
-            Toast.makeText(context, t, Toast.LENGTH_LONG).show()
-        })
-
         viewModel.navigate.observe(viewLifecycleOwner, Observer {
             it.consume()?.let { eventWrapper ->
                 if (eventWrapper.navigateUp) {
@@ -173,24 +170,49 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         viewModel.labelIcon.observe(viewLifecycleOwner, Observer {
             imageView.setImageResource(it)
         })
+
+        viewModel.reminder.observe(viewLifecycleOwner, Observer {
+            applyReminder(it)
+        })
     }
 
-    private fun applyTaskOnView(flatTaskDTO: FlatTaskDTO) {
+    private fun applyReminder(reminder: Reminder?) {
 
-
-        showSubTasks(flatTaskDTO.subTasks)
-    }
-
-    private fun applyListeners(flatTaskDTO: FlatTaskDTO) {
-
-        val now = LocalDateTime.now()
+        val calendar = Calendar.getInstance()
+        calendar.time = reminder?.date ?: run { Date() }
 
         tv_date.setOnClickListener {
-            DatePickerDialog(context!!, this, now.year, now.monthValue - 1, now.dayOfMonth).show()
+            DatePickerDialog(
+                context!!,
+                this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         tv_time.setOnClickListener {
-            TimePickerDialog(context!!, this, now.hour, now.minute, true).show()
+            TimePickerDialog(
+                context!!,
+                this,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+            ).show()
+        }
+
+        b_remove_reminder.setOnClickListener {
+            viewModel.deleteReminder()
+        }
+
+
+        if (reminder != null) {
+            // todo format
+            tv_date.text = calendar.time.toString()
+            tv_time.text = calendar.time.toString()
+        } else {
+            tv_date.text = "date"
+            tv_time.text = "time"
         }
     }
 
@@ -213,18 +235,11 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val date = LocalDateTime.now()
-            .withYear(year)
-            .withMonth(month + 1)
-            .withDayOfMonth(dayOfMonth)
-        // TODO update reminder
+        viewModel.updateReminderDate(year, month, dayOfMonth)
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        var time = LocalDateTime.now()
-            .withHour(hourOfDay)
-            .withMinute(minute)
-        // TODO update reminder
+        viewModel.updateReminderTime(hourOfDay, minute)
     }
 
     override fun onDetach() {
@@ -235,7 +250,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     private fun applyColor() {
         this.viewModel.color.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
-            return@Observer
+                // todo reset color ?
+                return@Observer
             }
 
             task_root.setBackgroundColor(Color.parseColor(it))

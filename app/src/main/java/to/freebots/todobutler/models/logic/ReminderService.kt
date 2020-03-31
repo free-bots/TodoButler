@@ -4,7 +4,7 @@ import android.app.Application
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.Reminder
 
-class ReminderService(application: Application): BaseLogicService<Reminder>(application) {
+class ReminderService(application: Application) : BaseLogicService<Reminder>(application) {
 
     override fun findAll(): MutableList<Reminder> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -23,6 +23,10 @@ class ReminderService(application: Application): BaseLogicService<Reminder>(appl
     }
 
     override fun delete(e: Reminder): Reminder {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun findAllDue(): MutableList<Reminder> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

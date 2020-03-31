@@ -13,6 +13,7 @@ class FlatTaskDTO(
     var isCompleted: Boolean,
     var isPinned: Boolean,
     var location: Location?,
+    var reminder: Reminder?,
     var color: String,
     var subTasks: MutableList<FlatTaskDTO>,
     var attachments: MutableList<Attachment>,
@@ -29,6 +30,7 @@ class FlatTaskDTO(
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readParcelable(Location::class.java.classLoader),
+        parcel.readParcelable(Reminder::class.java.classLoader),
         parcel.readString()!!,
         parcel.readParcelableArray(FlatTaskDTO::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<FlatTaskDTO>,
         parcel.readParcelableArray(Attachment::class.java.classLoader)!!.toMutableList<Parcelable>() as MutableList<Attachment>,
@@ -45,6 +47,7 @@ class FlatTaskDTO(
         parcel.writeByte(if (isCompleted) 1 else 0)
         parcel.writeByte(if (isPinned) 1 else 0)
         parcel.writeParcelable(location, flags)
+        parcel.writeParcelable(reminder, flags)
         parcel.writeString(color)
         parcel.writeParcelableArray(subTasks.toTypedArray(), flags)
         parcel.writeParcelableArray(attachments.toTypedArray(), flags)

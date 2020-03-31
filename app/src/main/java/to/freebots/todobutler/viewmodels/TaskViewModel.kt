@@ -13,6 +13,7 @@ import to.freebots.todobutler.common.Event
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.*
 import to.freebots.todobutler.models.logic.*
+import java.util.*
 
 class TaskViewModel(application: Application) : BaseViewModel(application), BaseOperations<Task>,
     BaseFlatTaskOperations {
@@ -212,6 +213,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.isPinned = isPinned.value!!
         _current?.color = color.value!!
         _current?.location = location.value
+        _current?.reminder = reminder.value
 
         subscribe(flatTaskService.updateRx(_current!!)
             .subscribe {
@@ -248,6 +250,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 false,
                 false,
                 null,
+                null,
                 _current!!.color,
                 mutableListOf(),
                 mutableListOf(),
@@ -281,6 +284,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 "DESC",
                 false,
                 false,
+                null,
                 null,
                 "",
                 mutableListOf(),
@@ -318,10 +322,53 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         subTasks.postValue(flatTaskDTO.subTasks)
         color.postValue(flatTaskDTO.color)
         location.postValue(flatTaskDTO.location)
+        reminder.postValue(flatTaskDTO.reminder)
 
         if (flatTaskDTO.label.icon.isEmpty().not()) {
             labelIcon.postValue(flatTaskDTO.label.icon.toInt())
         }
+    }
+
+    fun updateReminderDate(year: Int, month: Int, dayOfMonth: Int) {
+        val reminder: Reminder? = if (this.reminder.value == null) {
+            Reminder(Date(), null, null, null, null)
+        } else {
+            this.reminder.value
+        }
+
+        val calendar = Calendar.getInstance()
+        calendar.time = reminder!!.date
+
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+        reminder.date = calendar.time
+
+        this.reminder.postValue(reminder)
+    }
+
+    fun updateReminderTime(hourOfDay: Int, minute: Int) {
+        val reminder: Reminder? = if (this.reminder.value == null) {
+            Reminder(Date(), null, null, null, null)
+        } else {
+            this.reminder.value
+        }
+
+        val calendar = Calendar.getInstance()
+        calendar.time = reminder!!.date
+
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        calendar.set(Calendar.MINUTE, minute)
+
+        reminder.date = calendar.time
+
+        this.reminder.postValue(reminder)
+    }
+
+    fun deleteReminder() {
+        this.reminder.postValue(null)
+        // todo remove in database
     }
 
     open class EventWrapper<E>(var e: E?, val navigateUp: Boolean = false)

@@ -21,6 +21,12 @@ data class TaskDTO(
     var location: Location?,
 
     @Relation(
+        parentColumn = "reminderId",
+        entityColumn = "id"
+    )
+    var reminder: Reminder?,
+
+    @Relation(
         parentColumn = "id",
         entityColumn = "parentTaskId"
     )

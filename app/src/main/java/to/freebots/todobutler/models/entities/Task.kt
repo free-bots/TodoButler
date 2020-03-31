@@ -13,7 +13,7 @@ class Task(
     var isCompleted: Boolean,
     var isPinned: Boolean,
     var locationId: Long?,
-//    var reminderId: Long?,
+    var reminderId: Long?,
     var color: String,
     id: Long? = 0,
     createdAt: Date? = null,
