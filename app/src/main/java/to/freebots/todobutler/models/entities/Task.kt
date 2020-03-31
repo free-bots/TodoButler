@@ -14,6 +14,7 @@ class Task(
     var isPinned: Boolean,
     var locationId: Long?,
     var reminderId: Long?,
+    var priority: Priority,
     var color: String,
     id: Long? = 0,
     createdAt: Date? = null,

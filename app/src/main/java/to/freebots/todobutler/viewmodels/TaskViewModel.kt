@@ -36,6 +36,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     val color: MutableLiveData<String> = MutableLiveData()
     val location: MutableLiveData<Location?> = MutableLiveData()
     val reminder: MutableLiveData<Reminder?> = MutableLiveData()
+    val priority: MutableLiveData<Priority> = MutableLiveData()
 
     // navigate on new subTasks, clone ....
     val navigate: MutableLiveData<Event<EventWrapper<FlatTaskDTO>>> = MutableLiveData()
@@ -214,6 +215,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.color = color.value!!
         _current?.location = location.value
         _current?.reminder = reminder.value
+        _current?.priority = priority.value!!
 
         subscribe(flatTaskService.updateRx(_current!!)
             .subscribe {
@@ -251,6 +253,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 false,
                 null,
                 null,
+                Priority.LOW,
                 _current!!.color,
                 mutableListOf(),
                 mutableListOf(),
@@ -286,6 +289,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -323,6 +327,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         color.postValue(flatTaskDTO.color)
         location.postValue(flatTaskDTO.location)
         reminder.postValue(flatTaskDTO.reminder)
+        priority.postValue(flatTaskDTO.priority)
 
         if (flatTaskDTO.label.icon.isEmpty().not()) {
             labelIcon.postValue(flatTaskDTO.label.icon.toInt())

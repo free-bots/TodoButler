@@ -4,10 +4,7 @@ import to.freebots.todobutler.models.database.Database
 import to.freebots.todobutler.models.dto.AttachmentDAO
 import to.freebots.todobutler.models.dto.LabelDAO
 import to.freebots.todobutler.models.dto.TaskDAO
-import to.freebots.todobutler.models.entities.Attachment
-import to.freebots.todobutler.models.entities.FlatTaskDTO
-import to.freebots.todobutler.models.entities.Label
-import to.freebots.todobutler.models.entities.Task
+import to.freebots.todobutler.models.entities.*
 
 class Mock {
 
@@ -26,23 +23,262 @@ class Mock {
             val parentTask =
                 createTask(
                     taskDAO,
-                    Task(labelId, null, "parent", "parent", false, false, null, null, "")
+                    Task(
+                        labelId,
+                        null,
+                        "parent",
+                        "parent",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    )
                 )
 
             val children = createSubTaskOf(
                 taskDAO, parentTask, listOf(
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, ""),
-                    Task(labelId, null, "child", "child", false, false, null, null, "")
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        labelId,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    )
                 )
             )
 
@@ -56,10 +292,54 @@ class Mock {
 
             val childrenOfChildern = createSubTaskOf(
                 taskDAO, children[0], listOf(
-                    Task(basicLabels[1].id!!, null, "child", "child", false, false, null, null, ""),
-                    Task(basicLabels[1].id!!, null, "child", "child", false, false, null, null, ""),
-                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null, null, ""),
-                    Task(basicLabels[2].id!!, null, "child", "child", false, false, null, null, "")
+                    Task(
+                        basicLabels[1].id!!,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        basicLabels[1].id!!,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        basicLabels[2].id!!,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    ),
+                    Task(
+                        basicLabels[2].id!!,
+                        null,
+                        "child",
+                        "child",
+                        false,
+                        false,
+                        null,
+                        null,
+                        Priority.LOW,
+                        ""
+                    )
                 )
             )
         }
@@ -123,6 +403,7 @@ class Mock {
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -137,6 +418,7 @@ class Mock {
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -151,6 +433,7 @@ class Mock {
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(),
                 mutableListOf(),
@@ -165,6 +448,7 @@ class Mock {
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(
                     FlatTaskDTO(
@@ -176,6 +460,7 @@ class Mock {
                         false,
                         null,
                         null,
+                        Priority.LOW,
                         "",
                         mutableListOf(),
                         mutableListOf(),
@@ -194,6 +479,7 @@ class Mock {
                 false,
                 null,
                 null,
+                Priority.LOW,
                 "",
                 mutableListOf(
                     FlatTaskDTO(
@@ -205,6 +491,7 @@ class Mock {
                         false,
                         null,
                         null,
+                        Priority.LOW,
                         "",
                         mutableListOf(
                             FlatTaskDTO(
@@ -216,6 +503,7 @@ class Mock {
                                 false,
                                 null,
                                 null,
+                                Priority.LOW,
                                 "",
                                 mutableListOf(
                                     FlatTaskDTO(
@@ -227,6 +515,7 @@ class Mock {
                                         false,
                                         null,
                                         null,
+                                        Priority.LOW,
                                         "",
                                         mutableListOf(),
                                         mutableListOf(),
@@ -255,6 +544,7 @@ class Mock {
             false,
             null,
             null,
+            Priority.LOW,
             "",
             listOfFlatTaskDTO.map { flatTaskDTO ->
                 flatTaskDTO.parentTaskId = 19
