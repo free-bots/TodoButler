@@ -376,5 +376,24 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         // todo remove in database
     }
 
+    fun deleteLocation() {
+        // todo delete in service
+        this.location.postValue(null)
+    }
+
+    fun updateLocation(latitude: Double, longitude: Double) {
+
+        if (location.value == null) {
+            // todo create new in service
+            this.location.postValue(Location(latitude, longitude))
+        } else {
+            // todo update in service
+            this.location.value?.latitude = latitude
+            this.location.value?.longitude = longitude
+            this.location.postValue(this.location.value)
+        }
+
+    }
+
     open class EventWrapper<E>(var e: E?, val navigateUp: Boolean = false)
 }

@@ -74,4 +74,7 @@ dependencies {
     implementation 'com.github.dhaval2404:colorpicker:1.0'
     implementation 'com.michalsvec:single-row-calednar:1.0.0'
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
+
+    implementation 'io.nlopez.smartlocation:library:3.3.3'
+    implementation 'io.nlopez.smartlocation:rx:3.3.3'
 }
