@@ -4,21 +4,26 @@ package to.freebots.todobutler.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ShareCompat
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.content_attachments.*
 import kotlinx.android.synthetic.main.fragment_attachment.*
-
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.AttachmentsAdapter
 import to.freebots.todobutler.models.entities.Attachment
 import to.freebots.todobutler.models.entities.FlatTaskDTO
+import to.freebots.todobutler.models.logic.StorageService
 import to.freebots.todobutler.viewmodels.AttachmentViewModel
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * A simple [Fragment] subclass.
@@ -84,9 +89,19 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
 
             FILE_CREATE_REQUEST -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let {
-                        //                        val attachment = viewModel.selectedAttachment.value
-                        // todo write data
+                    data?.data?.let {uri ->
+                        try {
+                            context?.contentResolver?.openFileDescriptor(uri, "w")?.use {
+                                FileOutputStream(it.fileDescriptor).use { fileOutputStream ->
+                                    val path = viewModel.selectedAttachment.value?.path
+                                    fileOutputStream.write(StorageService(activity?.application!!).file(path!!).readBytes())
+                                }
+                            }
+                        } catch (e: FileNotFoundException) {
+                            e.printStackTrace()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             }
@@ -117,7 +132,19 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
     }
 
     override fun edit(attachment: Attachment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val f = StorageService(activity?.application!!).file(attachment.path)
+        val u = FileProvider.getUriForFile(context!!, "to.freebots.fileprovider", f)
+
+
+        val intent = ShareCompat.IntentBuilder.from(activity!!)
+            .setStream(u)
+            .intent
+            .setAction(Intent.ACTION_SEND) //Change if needed
+            .setDataAndType(u, "*/*")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        startActivity(intent)
     }
 
     override fun open(attachment: Attachment) {
