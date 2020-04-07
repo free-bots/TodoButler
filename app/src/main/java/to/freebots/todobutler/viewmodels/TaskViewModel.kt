@@ -19,7 +19,11 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     BaseFlatTaskOperations {
 
     private val locationService: LocationService by lazy {
-        LocationService(application);
+        LocationService(application)
+    }
+
+    private val reminderService: ReminderService by lazy {
+        ReminderService(application)
     }
 
     // todo swipeRefresh layout....
@@ -339,14 +343,48 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     fun updateReminderDate(year: Int, month: Int, dayOfMonth: Int) {
-        val reminder: Reminder? = if (this.reminder.value == null) {
-            Reminder(Date(), null, null, null, null)
+        if (this.reminder.value == null) {
+
+            val reminder = Reminder(Date(), null, null, null, null)
+
+            subscribe(
+                reminderService.createRx(
+                    updateDateInReminder(
+                        year,
+                        month,
+                        dayOfMonth,
+                        reminder
+                    )
+                ).subscribe {
+                    this.reminder.value = it
+                    this.update()
+                })
         } else {
-            this.reminder.value
+            subscribe(
+                reminderService.updateRx(
+                    updateDateInReminder(
+                        year,
+                        month,
+                        dayOfMonth,
+                        this.reminder.value!!
+                    )
+                ).subscribe {
+                    this.reminder.value = it
+                    this.update()
+                })
         }
 
+
+    }
+
+    private fun updateDateInReminder(
+        year: Int,
+        month: Int,
+        dayOfMonth: Int,
+        reminder: Reminder
+    ): Reminder {
         val calendar = Calendar.getInstance()
-        calendar.time = reminder!!.date
+        calendar.time = reminder.date
 
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month)
@@ -354,30 +392,52 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
 
         reminder.date = calendar.time
 
-        this.reminder.postValue(reminder)
+        return reminder
     }
 
     fun updateReminderTime(hourOfDay: Int, minute: Int) {
-        val reminder: Reminder? = if (this.reminder.value == null) {
-            Reminder(Date(), null, null, null, null)
+        if (this.reminder.value == null) {
+            val reminder = Reminder(Date(), null, null, null, null)
+            subscribe(
+                reminderService.createRx(
+                    updateTimeInReminder(
+                        hourOfDay,
+                        minute,
+                        reminder
+                    )
+                ).subscribe {
+                    this.reminder.value = it
+                    this.update()
+                })
         } else {
-            this.reminder.value
+            subscribe(
+                reminderService.updateRx(
+                    updateTimeInReminder(hourOfDay, minute, this.reminder.value!!)
+                ).subscribe {
+                    this.reminder.value = it
+                    this.update()
+                })
         }
+    }
 
+    private fun updateTimeInReminder(hourOfDay: Int, minute: Int, reminder: Reminder): Reminder {
         val calendar = Calendar.getInstance()
-        calendar.time = reminder!!.date
+        calendar.time = reminder.date
 
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
 
         reminder.date = calendar.time
 
-        this.reminder.postValue(reminder)
+        return reminder
     }
 
     fun deleteReminder() {
-        this.reminder.postValue(null)
-        // todo remove in database
+        this.reminder.value?.let {
+            subscribe(reminderService.deleteRx(it).subscribe {
+                this.reminder.postValue(null)
+            })
+        }
     }
 
     fun deleteLocation() {

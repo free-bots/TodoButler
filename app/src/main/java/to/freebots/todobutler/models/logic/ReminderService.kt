@@ -1,32 +1,52 @@
 package to.freebots.todobutler.models.logic
 
 import android.app.Application
+import io.reactivex.Observable
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.Reminder
 
 class ReminderService(application: Application) : BaseLogicService<Reminder>(application) {
 
     override fun findAll(): MutableList<Reminder> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return reminderDAO.findAll()
     }
 
     override fun findById(id: Long): Reminder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return reminderDAO.findById(id)
     }
 
     override fun create(e: Reminder): Reminder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return reminderDAO.createReminder(e)
     }
 
     override fun update(e: Reminder): Reminder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return reminderDAO.updateReminder(e)
     }
 
     override fun delete(e: Reminder): Reminder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        reminderDAO.delete(e)
+        return e
     }
 
     fun findAllDue(): MutableList<Reminder> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mutableListOf()
+    }
+
+    fun createRx(e: Reminder): Observable<Reminder> {
+        return Observable.fromCallable {
+            create(e)
+        }
+    }
+
+    fun updateRx(e: Reminder): Observable<Reminder> {
+        return Observable.fromCallable {
+            update(e)
+        }
+    }
+
+    fun deleteRx(e: Reminder): Observable<Reminder> {
+        return Observable.fromCallable {
+            delete(e)
+        }
     }
 }
