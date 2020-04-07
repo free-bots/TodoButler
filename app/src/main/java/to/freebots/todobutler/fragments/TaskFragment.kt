@@ -88,7 +88,16 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 return true
             }
             R.id.menu_location -> {
-                findNavController().navigate(R.id.action_taskFragment_to_locationFragment)
+                arguments?.let { arg ->
+                    arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
+                        val bundle = Bundle().apply { putParcelable("flatTaskDTO", flatTaskDTO) }
+                        findNavController().navigate(
+                            R.id.action_taskFragment_to_locationFragment,
+                            bundle
+                        )
+                    }
+                }
+//                findNavController().navigate(R.id.action_taskFragment_to_locationFragment)
                 return true
             }
             R.id.menu_subtask -> {

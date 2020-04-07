@@ -24,6 +24,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import to.freebots.todobutler.R
+import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.viewmodels.TaskViewModel
 
 
@@ -44,6 +45,10 @@ class LocationFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        arguments?.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let{
+            viewModel.getUpdated(it.id!!)
+        }
+
         Configuration.getInstance().load(context, activity?.getPreferences(Context.MODE_PRIVATE))
     }
 
@@ -54,7 +59,7 @@ class LocationFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.menu_delete -> {
                 viewModel.deleteLocation()
                 return true
@@ -157,12 +162,12 @@ class LocationFragment : Fragment() {
         val controller = map.controller
 
         viewModel.location.observe(viewLifecycleOwner) {
-            it?.let {location ->
+            it?.let { location ->
                 taskMarker.setVisible(true)
-                val point =  GeoPoint(location.latitude, location.longitude)
+                val point = GeoPoint(location.latitude, location.longitude)
                 taskMarker.position = point
                 controller.setCenter(point)
-            }?:run {
+            } ?: run {
                 taskMarker.setVisible(false)
             }
         }

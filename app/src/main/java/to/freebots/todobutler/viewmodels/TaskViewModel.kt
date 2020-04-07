@@ -18,6 +18,10 @@ import java.util.*
 class TaskViewModel(application: Application) : BaseViewModel(application), BaseOperations<Task>,
     BaseFlatTaskOperations {
 
+    private val locationService: LocationService by lazy {
+        LocationService(application);
+    }
+
     // todo swipeRefresh layout....
     val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -377,20 +381,41 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     fun deleteLocation() {
-        // todo delete in service
-        this.location.postValue(null)
+        this.location.value?.let {
+            subscribe(locationService.deleteRx(it).subscribe {
+                this.location.value = null
+                this.update()
+            })
+        }
     }
 
     fun updateLocation(latitude: Double, longitude: Double) {
 
         if (location.value == null) {
-            // todo create new in service
-            this.location.postValue(Location(latitude, longitude))
+
+            subscribe(locationService.createRx(
+                Location(
+                    latitude,
+                    longitude
+                )
+            ).subscribe {
+                this.location.value = it
+                this.update()
+            })
+
         } else {
-            // todo update in service
-            this.location.value?.latitude = latitude
-            this.location.value?.longitude = longitude
-            this.location.postValue(this.location.value)
+
+            this.location.value?.let {
+                it.latitude = latitude
+                it.longitude = longitude
+                subscribe(locationService.updateRx(
+                    it
+                ).subscribe { updatedLocation ->
+                    this.location.value = updatedLocation
+                    this.update()
+                })
+            }
+
         }
 
     }

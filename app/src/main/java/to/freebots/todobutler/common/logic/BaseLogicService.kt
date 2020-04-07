@@ -29,6 +29,14 @@ abstract class BaseLogicService<E : BaseEntity>(application: Application) {
         database.taskDAO()
     }
 
+    protected val reminderDAO by lazy {
+        database.reminderDAO()
+    }
+
+    protected val locationDAO by lazy {
+        database.locationDAO()
+    }
+
     protected fun findIndex(baseEntity: BaseEntity, baseEntities: MutableList<BaseEntity>): Int {
         return baseEntities.indexOfFirst { b -> b.id == baseEntity.id }
     }
