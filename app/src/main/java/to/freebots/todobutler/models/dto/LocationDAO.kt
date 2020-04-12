@@ -29,4 +29,11 @@ abstract class LocationDAO : BaseDAO<Location> {
         update(location)
         return findLocationById(location.id!!)
     }
+
+    @Transaction
+    open fun createCopy(location: Location): Location {
+        return createLocation(location.apply {
+            id = null
+        })
+    }
 }

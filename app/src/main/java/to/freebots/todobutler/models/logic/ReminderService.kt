@@ -49,4 +49,12 @@ class ReminderService(application: Application) : BaseLogicService<Reminder>(app
             delete(e)
         }
     }
+
+    fun createCopy(e: Reminder?): Reminder? {
+        return if (e == null) {
+            null
+        } else {
+            reminderDAO.createCopy(e)
+        }
+    }
 }

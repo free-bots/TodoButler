@@ -40,9 +40,17 @@ class LocationService(application: Application) : BaseLogicService<Location>(app
         }
     }
 
-    fun deleteRx(e: Location) :Observable<Location> {
+    fun deleteRx(e: Location): Observable<Location> {
         return Observable.fromCallable {
             delete(e)
+        }
+    }
+
+    fun createCopy(e: Location?): Location? {
+        return if (e == null) {
+            null
+        } else {
+            locationDAO.createCopy(e)
         }
     }
 }

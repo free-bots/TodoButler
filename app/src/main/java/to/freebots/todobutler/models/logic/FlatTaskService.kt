@@ -171,16 +171,19 @@ class FlatTaskService(
         var flat = flatTaskDTO_ToTaks(e)
         flat.id = null
         flat.parentTaskId = task?.id
-        flat = taskService.create(flat)
-        tasks.add(flat)
 
         val attachmentCopy = e.attachments.map {
             it.taskId = flat.id!!
             it
         }.toMutableList()
 
-        // todo add other dependencies... attachments ....
         attachmentService.createAll(attachmentCopy)
+
+        flat.locationId = locationService.createCopy(e.location)?.id
+        flat.reminderId = reminderService.createCopy(e.reminder)?.id
+
+        flat = taskService.create(flat)
+        tasks.add(flat)
 
         e.subTasks.forEach { t: FlatTaskDTO -> saveCopy(t, flat, tasks) }
         return flat

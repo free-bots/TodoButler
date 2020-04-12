@@ -28,4 +28,11 @@ abstract class ReminderDAO : BaseDAO<Reminder> {
         update(e)
         return findById(e.id!!)
     }
+
+    @Transaction
+    open fun createCopy(e: Reminder): Reminder {
+        return createReminder(e.apply {
+            id = null
+        })
+    }
 }
