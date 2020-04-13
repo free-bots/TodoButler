@@ -1,15 +1,10 @@
 package to.freebots.todobutler.models.logic
 
 import android.app.Application
-import io.reactivex.Observable
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.Reminder
 
 class ReminderService(application: Application) : BaseLogicService<Reminder>(application) {
-
-    val notificationService by lazy {
-        ReminderNotificationService(application)
-    }
 
     override fun findAll(): MutableList<Reminder> {
         return reminderDAO.findAll()
@@ -34,24 +29,6 @@ class ReminderService(application: Application) : BaseLogicService<Reminder>(app
 
     fun findAllDue(): MutableList<Reminder> {
         return mutableListOf()
-    }
-
-    fun createRx(e: Reminder): Observable<Reminder> {
-        return Observable.fromCallable {
-            create(e)
-        }
-    }
-
-    fun updateRx(e: Reminder): Observable<Reminder> {
-        return Observable.fromCallable {
-            update(e)
-        }
-    }
-
-    fun deleteRx(e: Reminder): Observable<Reminder> {
-        return Observable.fromCallable {
-            delete(e)
-        }
     }
 
     fun createCopy(e: Reminder?): Reminder? {

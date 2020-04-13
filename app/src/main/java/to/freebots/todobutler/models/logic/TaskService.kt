@@ -3,14 +3,9 @@ package to.freebots.todobutler.models.logic
 import android.app.Application
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.Task
-import java.util.*
 
 class TaskService(application: Application, private val labelService: LabelService) :
     BaseLogicService<Task>(application) {
-
-    private val _tasks = database.taskDAO().findAllLiveData()
-
-    fun findAllTask() = _tasks
 
     override fun findAll(): MutableList<Task> = taskDAO.findAll()
 
@@ -33,10 +28,6 @@ class TaskService(application: Application, private val labelService: LabelServi
     fun deleteAllByIds(tasks: MutableList<Long>) {
         taskDAO.deleteAllById(tasks)
     }
-
-//    fun createAsync(e: Task): Observable<Task> {
-//
-//    }
 
     private fun findByRowId(id: Long): Task {
         return taskDAO.findByRowId(id)

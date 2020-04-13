@@ -37,7 +37,11 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
             .subscribeOn(Schedulers.computation())
     }
 
-    protected fun subscribe(disposable: Disposable) {
+    protected fun subscribe(disposable: Disposable?) {
+        if (disposable == null) {
+            return
+        }
+
         this.disposable.add(disposable)
     }
 

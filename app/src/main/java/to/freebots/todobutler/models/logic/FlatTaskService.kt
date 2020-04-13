@@ -20,7 +20,6 @@ class FlatTaskService(
 ) :
     BaseLogicService<FlatTaskDTO>(application) {
 
-    // todo add rx observer
     // todo add try catch and link to errorHandler
 
     val findAllFlatTasks: Flowable<MutableList<FlatTaskDTO>> =
@@ -301,11 +300,11 @@ class FlatTaskService(
         }
     }
 
-    fun deleteRx(e: FlatTaskDTO): Observable<FlatTaskDTO> {
+    override fun deleteRx(e: FlatTaskDTO): Observable<FlatTaskDTO> {
         return Observable.fromCallable {
             reminderHook(e)
             pinnedNotificationHook(e.apply { isPinned = false })
-            return@fromCallable delete(e)
+            delete(e)
         }
     }
 
@@ -330,7 +329,7 @@ class FlatTaskService(
         return taskDAO.findDTOByIdTEST(id).map { t -> flatDTO(t) }.toObservable()
     }
 
-    fun updateRx(e: FlatTaskDTO): Observable<Task> {
+    fun updateRxAsTask(e: FlatTaskDTO): Observable<Task> {
         return Observable.fromCallable {
             reminderHook(e)
             pinnedNotificationHook(e)

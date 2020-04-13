@@ -15,8 +15,7 @@ import to.freebots.todobutler.models.entities.*
 import to.freebots.todobutler.models.logic.*
 import java.util.*
 
-class TaskViewModel(application: Application) : BaseViewModel(application), BaseOperations<Task>,
-    BaseFlatTaskOperations {
+class TaskViewModel(application: Application) : BaseViewModel(application) {
 
     private val locationService: LocationService by lazy {
         LocationService(application)
@@ -78,6 +77,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private val onFlatTaskDTO = Consumer<Any> { t: Any ->
         when (t) {
             is MutableList<*> -> {
@@ -144,48 +144,6 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
                 }.toMutableList()
             )
         }
-
-
-        this.searchedTasks.value?.let {
-            println(it.size)
-        }
-
-        var test = this.searchedTasks.value
-
-        println()
-    }
-
-    override fun fetchAll() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun create(e: Task) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun update(e: Task) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun delete(e: Task) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun fetchAll_DTO() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun create(e: FlatTaskDTO) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun update(e: FlatTaskDTO) {
-//        // todo only update the top task in the tree -> child update self
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun delete(e: FlatTaskDTO) {
-        // todo remove
     }
 
     fun delete() {
@@ -207,13 +165,16 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
     }
 
     fun update() {
+        subscribe(updateCurrent()?.subscribe {})
+    }
 
+    private fun updateCurrent(): Observable<Task>? {
         if (isDeleting.value ?: run { false }) {
-            return
+            return null
         }
 
         if (_current == null) {
-            return
+            return null
         }
 
         _current?.name = name.value!!
@@ -225,59 +186,77 @@ class TaskViewModel(application: Application) : BaseViewModel(application), Base
         _current?.reminder = reminder.value
         _current?.priority = priority.value!!
 
-        subscribe(flatTaskService.updateRx(_current!!)
-            .subscribe {
+        return flatTaskService.updateRxAsTask(_current!!)
+            .doOnNext {
                 isEditing.postValue(false)
             }
-        )
-
     }
 
     /**
      * makes a copy of the current task and adds it as a child to the parent task
      */
     fun copyIntoParent() {
-        // todo call update ! and when copy
+        val updateObservable = updateCurrent()
 
-        subscribe(flatTaskService.copyIntoParent(_current!!).subscribe { t: FlatTaskDTO? ->
-            t?.let {
-                navigate(t)
-            }
-        })
+        if (updateObservable != null) {
+            subscribe(
+                updateObservable.flatMap { flatTaskService.copyIntoParent(_current!!) }
+                    .subscribe { t: FlatTaskDTO? ->
+                        t?.let {
+                            navigate(t)
+                        }
+                    })
+        } else {
+            subscribe(flatTaskService.copyIntoParent(_current!!).subscribe { t: FlatTaskDTO? ->
+                t?.let {
+                    navigate(t)
+                }
+            })
+        }
     }
 
 
     fun createSubTask() {
 
-        // todo call update ! and when copy
+        if (_current == null) {
+            throw Exception("no task found")
+        }
 
-        if (_current != null) {
-            val default = FlatTaskDTO(
-                _current!!.label,
-                _current!!.id,
-                "NEW",
-                "DESC ${_current!!.id}",
-                false,
-                false,
-                null,
-                null,
-                Priority.LOW,
-                _current!!.color,
-                mutableListOf(),
-                mutableListOf(),
-                null
-            )
 
+        val default = FlatTaskDTO(
+            _current!!.label,
+            _current!!.id,
+            "NEW",
+            "DESC ${_current!!.id}",
+            false,
+            false,
+            null,
+            null,
+            Priority.LOW,
+            _current!!.color,
+            mutableListOf(),
+            mutableListOf(),
+            null
+        )
+
+
+        val updateObservable = updateCurrent()
+
+        if (updateObservable != null) {
+            subscribe(
+                updateObservable.flatMap { flatTaskService.createAsync(default) }
+                    .subscribe { t: FlatTaskDTO? ->
+                        t?.let {
+                            navigate(t)
+                        }
+                    })
+        } else {
             subscribe(flatTaskService.createAsync(default).subscribe { t: FlatTaskDTO? ->
                 t?.let {
                     navigate(t)
                 }
             })
-        } else {
-            throw Exception("no task found")
         }
-
-
     }
 
     fun navigate(e: FlatTaskDTO?, navigateUp: Boolean = false) {
