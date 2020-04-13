@@ -69,7 +69,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         }
 
 
-        viewModel.labels.observe(this, Observer { t: MutableList<Label> ->
+        viewModel.labels.observe(viewLifecycleOwner, Observer { t: MutableList<Label> ->
             labelsAdapter.labels = t
         })
     }

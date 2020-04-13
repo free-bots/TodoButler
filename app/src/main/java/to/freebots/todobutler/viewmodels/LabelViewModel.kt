@@ -2,10 +2,7 @@ package to.freebots.todobutler.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.GlobalScope
 import to.freebots.todobutler.common.entities.BaseEntity
-import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.models.logic.LabelService
 

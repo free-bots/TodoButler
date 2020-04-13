@@ -1,9 +1,7 @@
 package to.freebots.todobutler.models.dto
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Label

@@ -27,10 +27,6 @@ class ReminderService(application: Application) : BaseLogicService<Reminder>(app
         return e
     }
 
-    fun findAllDue(): MutableList<Reminder> {
-        return mutableListOf()
-    }
-
     fun createCopy(e: Reminder?): Reminder? {
         return if (e == null) {
             null

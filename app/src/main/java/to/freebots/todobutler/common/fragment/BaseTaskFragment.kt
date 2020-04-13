@@ -25,7 +25,7 @@ abstract class BaseTaskFragment : Fragment() {
             getLabel()?.let { label ->
                 viewModel.createDefaultFlatTask(label).subscribe {
                     val bundle = Bundle().apply {
-                        putParcelable("flatTaskDTO", it)
+                        putLong("flatTaskDTO", it.id!!)
                     }
                     findNavController().navigate(
                         navigation,
@@ -51,7 +51,7 @@ abstract class BaseTaskFragment : Fragment() {
 
             override fun open(flatTaskDTO: FlatTaskDTO) {
                 val bundle = Bundle().apply {
-                    putParcelable("flatTaskDTO", flatTaskDTO)
+                    putLong("flatTaskDTO", flatTaskDTO.id!!)
                 }
                 findNavController().navigate(
                     navigation,

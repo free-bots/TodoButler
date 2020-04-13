@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_label_info.*
-import kotlinx.android.synthetic.main.layout_task_item.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.models.entities.Label
 

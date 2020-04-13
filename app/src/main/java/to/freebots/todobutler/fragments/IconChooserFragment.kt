@@ -41,9 +41,7 @@ class IconChooserFragment : DialogFragment() {
             items = icons.toMutableList()
             action = object : IconAdapter.Action{
                 override fun onOpen(icon: Int) {
-                    selectionListener?.let {
-                        it.onIcon(icon.toString())
-                    }
+                    selectionListener?.onIcon(icon.toString())
 
                     dismiss()
                 }

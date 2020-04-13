@@ -9,9 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.content_tasks.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
 import to.freebots.todobutler.common.fragment.BaseTaskFragment

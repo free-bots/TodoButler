@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_attachment.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.AttachmentsAdapter
 import to.freebots.todobutler.models.entities.Attachment
-import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.logic.StorageService
 import to.freebots.todobutler.viewmodels.AttachmentViewModel
 import java.io.FileNotFoundException
@@ -128,7 +127,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
     }
 
     private fun taskId(): Long? {
-        return arguments?.getParcelable<FlatTaskDTO>("flatTaskDTO")?.id
+        return arguments?.getLong("flatTaskDTO")
     }
 
     override fun edit(attachment: Attachment) {
@@ -142,7 +141,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
             .intent
             .setAction(Intent.ACTION_SEND) //Change if needed
             .setDataAndType(u, "*/*")
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         startActivity(intent)
     }

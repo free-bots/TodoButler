@@ -65,7 +65,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                     .setColorShape(ColorShape.SQAURE)    // Default ColorShape.CIRCLE
                     .setColorSwatch(ColorSwatch._300)    // Default ColorSwatch._500
                     .setDefaultColor(defaultColor)
-                    .setColorListener { color, colorHex ->
+                    .setColorListener { _, colorHex ->
                         // Handle Color Selection
                         this.viewModel.color.postValue(colorHex)
                     }
@@ -78,8 +78,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             }
             R.id.menu_location -> {
                 arguments?.let { arg ->
-                    arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        val bundle = Bundle().apply { putParcelable("flatTaskDTO", flatTaskDTO) }
+                    arg.getLong("flatTaskDTO").let { flatTaskDTO ->
+                        val bundle = Bundle().apply { putLong("flatTaskDTO", flatTaskDTO) }
                         findNavController().navigate(
                             R.id.action_taskFragment_to_locationFragment,
                             bundle
@@ -99,8 +99,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
             }
             R.id.menu_attachment -> {
                 arguments?.let { arg ->
-                    arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                        val bundle = Bundle().apply { putParcelable("flatTaskDTO", flatTaskDTO) }
+                    arg.getLong("flatTaskDTO").let { flatTaskDTO ->
+                        val bundle = Bundle().apply { putLong("flatTaskDTO", flatTaskDTO) }
                         findNavController().navigate(
                             R.id.action_taskFragment_to_attachmentFragment,
                             bundle
@@ -133,8 +133,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let { arg ->
-            arg.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let { flatTaskDTO ->
-                viewModel.getUpdated(flatTaskDTO.id!!)
+            arg.getLong("flatTaskDTO").let { flatTaskDTO ->
+                viewModel.getUpdated(flatTaskDTO)
             }
         }
 
@@ -151,7 +151,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 }
                 eventWrapper.e?.let {
                     val bundle = Bundle().apply {
-                        putParcelable("flatTaskDTO", it)
+                        putLong("flatTaskDTO", it.id!!)
                     }
                     findNavController().navigate(R.id.action_taskFragment_self, bundle)
                 }

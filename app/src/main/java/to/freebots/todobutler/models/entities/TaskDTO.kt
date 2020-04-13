@@ -36,5 +36,4 @@ data class TaskDTO(
         entityColumn = "taskId"
     )
     var attachments: MutableList<Attachment>
-) {
-}
+)

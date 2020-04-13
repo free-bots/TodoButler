@@ -24,7 +24,6 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import to.freebots.todobutler.R
-import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.viewmodels.TaskViewModel
 
 
@@ -45,8 +44,8 @@ class LocationFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        arguments?.getParcelable<FlatTaskDTO>("flatTaskDTO")?.let{
-            viewModel.getUpdated(it.id!!)
+        arguments?.getLong("flatTaskDTO")?.let{
+            viewModel.getUpdated(it)
         }
 
         Configuration.getInstance().load(context, activity?.getPreferences(Context.MODE_PRIVATE))
@@ -96,7 +95,7 @@ class LocationFragment : Fragment() {
     }
 
     private fun initMap() {
-        map.overlays.clear();
+        map.overlays.clear()
 
         map.setTileSource(TileSourceFactory.MAPNIK)
 //        map.setBuiltInZoomControls(true) // not visible with the action button

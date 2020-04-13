@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_desc"></include>
+            app:layout_constraintTop_toBottomOf="@+id/et_desc" />
         <!--        <ViewStub-->
         <!--            android:id="@+id/vs_sub_tasks"-->
         <!--            android:layout_width="match_parent"-->

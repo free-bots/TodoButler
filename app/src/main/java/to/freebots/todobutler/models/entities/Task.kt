@@ -20,8 +20,7 @@ class Task(
     createdAt: Date? = null,
     updatedAt: Date? = null
 ) :
-    BaseEntity(id, createdAt, updatedAt) {
-}
+    BaseEntity(id, createdAt, updatedAt)
 
 enum class Priority(priorty: String){
     LOW("LOW"),

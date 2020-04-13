@@ -2,6 +2,7 @@ package to.freebots.todobutler
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import to.freebots.todobutler.models.logic.StorageService
 
 class MainActivity : AppCompatActivity() {
@@ -35,5 +36,8 @@ class MainActivity : AppCompatActivity() {
         println("MAINACTIVITY $taskId")
 
         // todo navigate to task
+        findNavController(R.id.nav_host_fragment).navigate(R.id.taskFragment, Bundle().apply {
+            putLong("flatTaskDTO", taskId)
+        })
     }
 }
