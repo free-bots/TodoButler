@@ -40,6 +40,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         ).get(TaskViewModel::class.java)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -49,6 +50,28 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater.inflate(R.menu.menu_task, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        viewModel.isPinned.observe(viewLifecycleOwner, Observer {
+            with(menu.findItem(R.id.menu_pinned)) {
+                setIcon(
+                    if (it) {
+                        R.drawable.ic_notifications_none_black_18dp
+                    } else {
+                        R.drawable.ic_notifications_off_black_18dp
+                    }
+                )
+                setTitle(
+                    if (it) {
+                        "PINNED"
+                    } else {
+                        "NOT PINNED"
+                    }
+                )
+            }
+        })
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -159,10 +182,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         })
 
         applyColor()
-
-        viewModel.isPinned.observe(viewLifecycleOwner, Observer {
-            // todo set icon and text on menu
-        })
 
         viewModel.labelIcon.observe(viewLifecycleOwner, Observer {
             imageView.setImageResource(it)
