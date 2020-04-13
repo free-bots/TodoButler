@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ShareCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,11 +16,7 @@ import kotlinx.android.synthetic.main.fragment_attachment.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.AttachmentsAdapter
 import to.freebots.todobutler.models.entities.Attachment
-import to.freebots.todobutler.models.logic.StorageService
 import to.freebots.todobutler.viewmodels.AttachmentViewModel
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 
 /**
  * A simple [Fragment] subclass.
@@ -70,6 +64,19 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
 
         rv_attachments.adapter = adapter
 
+        viewModel.uri.observe(viewLifecycleOwner, Observer {
+            it.consume()?.let { uri ->
+                val intent = ShareCompat.IntentBuilder.from(activity!!)
+                    .setStream(uri)
+                    .intent
+                    .setAction(Intent.ACTION_SEND) //Change if needed
+                    .setDataAndType(uri, "*/*")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                startActivity(intent)
+            }
+        })
+
         addListener()
     }
 
@@ -83,24 +90,12 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
                         viewModel.importFile(data?.data, it)
                     }
                 }
-                Toast.makeText(context, "got a file", Toast.LENGTH_LONG).show()
             }
 
             FILE_CREATE_REQUEST -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let {uri ->
-                        try {
-                            context?.contentResolver?.openFileDescriptor(uri, "w")?.use {
-                                FileOutputStream(it.fileDescriptor).use { fileOutputStream ->
-                                    val path = viewModel.selectedAttachment.value?.path
-                                    fileOutputStream.write(StorageService(activity?.application!!).file(path!!).readBytes())
-                                }
-                            }
-                        } catch (e: FileNotFoundException) {
-                            e.printStackTrace()
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
+                    data?.data?.let { uri ->
+                        viewModel.createFile(uri)
                     }
                 }
             }
@@ -131,19 +126,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
     }
 
     override fun edit(attachment: Attachment) {
-
-        val f = StorageService(activity?.application!!).file(attachment.path)
-        val u = FileProvider.getUriForFile(context!!, "to.freebots.fileprovider", f)
-
-
-        val intent = ShareCompat.IntentBuilder.from(activity!!)
-            .setStream(u)
-            .intent
-            .setAction(Intent.ACTION_SEND) //Change if needed
-            .setDataAndType(u, "*/*")
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-        startActivity(intent)
+        viewModel.getUri(attachment)
     }
 
     override fun open(attachment: Attachment) {
