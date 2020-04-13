@@ -19,7 +19,6 @@ class AttachmentService(application: Application, private val storageService: St
     }
 
     fun createAll(e: MutableList<Attachment>): MutableList<Attachment> {
-        //todo call file service to copy files
         val paths =
             storageService.makeCopyOfAllFiles(e.map { attachment -> attachment.path }.toMutableList())
         val copy = e.mapIndexed { index, attachment ->

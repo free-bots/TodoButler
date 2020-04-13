@@ -22,8 +22,6 @@ class Task(
 ) :
     BaseEntity(id, createdAt, updatedAt) {
 }
-// TODO: location, reminder, priority
-
 
 enum class Priority(priorty: String){
     LOW("LOW"),

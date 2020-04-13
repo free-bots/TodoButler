@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 class FlatTaskService(
-    application: Application,
+    private val application: Application,
     private val taskService: TaskService,
     private val attachmentService: AttachmentService,
     private val locationService: LocationService,
@@ -303,6 +303,8 @@ class FlatTaskService(
 
     fun deleteRx(e: FlatTaskDTO): Observable<FlatTaskDTO> {
         return Observable.fromCallable {
+            reminderHook(e)
+            pinnedNotificationHook(e.apply { isPinned = false })
             return@fromCallable delete(e)
         }
     }
@@ -330,7 +332,26 @@ class FlatTaskService(
 
     fun updateRx(e: FlatTaskDTO): Observable<Task> {
         return Observable.fromCallable {
+            reminderHook(e)
+            pinnedNotificationHook(e)
             taskService.update(flatTaskDTO_ToTaks(e))
+        }
+    }
+
+
+    private fun pinnedNotificationHook(e: FlatTaskDTO) {
+        if (e.isPinned) {
+            PinnedNotificationService(application).pin(e)
+        } else {
+            PinnedNotificationService(application).unPin(e)
+        }
+    }
+
+    private fun reminderHook(e: FlatTaskDTO) {
+        if (e.reminder != null) {
+            ReminderNotificationService(application).createAlarm(e)
+        } else {
+            ReminderNotificationService(application).cancelAlarm(e)
         }
     }
 }

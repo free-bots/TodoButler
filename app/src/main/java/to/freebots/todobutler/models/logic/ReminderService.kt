@@ -7,6 +7,10 @@ import to.freebots.todobutler.models.entities.Reminder
 
 class ReminderService(application: Application) : BaseLogicService<Reminder>(application) {
 
+    val notificationService by lazy {
+        ReminderNotificationService(application)
+    }
+
     override fun findAll(): MutableList<Reminder> {
         return reminderDAO.findAll()
     }
