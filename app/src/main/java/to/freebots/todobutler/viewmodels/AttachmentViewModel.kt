@@ -26,7 +26,7 @@ class AttachmentViewModel(application: Application) : BaseViewModel(application)
             return
         }
 
-        subscribe(attachmentService.createRx(uri, taskId).subscribe { attachment: Attachment ->
+        subscribe(attachmentService.createRx1(uri, taskId).subscribe { attachment: Attachment ->
             println(Gson().toJson(attachment))
         })
     }

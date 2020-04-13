@@ -8,12 +8,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import to.freebots.todobutler.common.entities.BaseEntity
 import to.freebots.todobutler.models.database.Database
-import java.util.*
 
 abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
     // todo add the logic services with dependency injection
-    // todo remove the functions
-    protected val disposeable = CompositeDisposable()
+    private val disposable = CompositeDisposable()
 
     protected var database = Database.getDatabase(application)
 
@@ -40,11 +38,11 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
     }
 
     protected fun subscribe(disposable: Disposable) {
-        disposeable.add(disposable)
+        this.disposable.add(disposable)
     }
 
     override fun onCleared() {
-        disposeable.dispose()
+        disposable.dispose()
         super.onCleared()
     }
 }

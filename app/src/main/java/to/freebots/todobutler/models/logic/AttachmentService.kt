@@ -51,17 +51,11 @@ class AttachmentService(application: Application, private val storageService: St
 
     }
 
-    fun createRx(uri: Uri, taskId: Long): Observable<Attachment> {
+    fun createRx1(uri: Uri, taskId: Long): Observable<Attachment> {
         return Observable.fromCallable {
             val originalName = storageService.fileName(uri)
             val innerFileName = storageService.saveFile(uri)
             create(Attachment(taskId, originalName, innerFileName, "TODO!"))
-        }
-    }
-
-    fun deleteRx(e: Attachment): Observable<Attachment> {
-        return Observable.fromCallable {
-            delete(e)
         }
     }
 

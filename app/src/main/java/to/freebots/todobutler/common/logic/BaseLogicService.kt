@@ -2,6 +2,7 @@ package to.freebots.todobutler.common.logic
 
 import android.app.Application
 import com.google.gson.Gson
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import to.freebots.todobutler.common.entities.BaseEntity
@@ -51,4 +52,22 @@ abstract class BaseLogicService<E : BaseEntity>(application: Application) {
     abstract fun create(e: E): E
     abstract fun update(e: E): E
     abstract fun delete(e: E): E
+
+    open fun createRx(e: E): Observable<E> {
+        return Observable.fromCallable {
+            create(e)
+        }
+    }
+
+    open fun updateRx(e: E): Observable<E> {
+        return Observable.fromCallable {
+            update(e)
+        }
+    }
+
+    open fun deleteRx(e: E): Observable<E> {
+        return Observable.fromCallable {
+            delete(e)
+        }
+    }
 }

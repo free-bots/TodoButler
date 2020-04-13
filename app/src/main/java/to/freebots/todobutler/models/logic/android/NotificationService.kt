@@ -15,11 +15,12 @@ import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.logic.*
 
 class NotificationService : JobIntentService() {
+
+    val CHANNEL_NAME by lazy { application.getString(R.string.channel_name) }
+    val CHANNEL_DESCRIPTION by lazy { application.getString(R.string.channel_description) }
+
     companion object {
         const val CHANNEL_ID = "ReminderChannel"
-        const val CHANNEL_NAME = "CHANNEL_NAME"   // todo translation
-        const val CHANNEL_DESCRIPTION = "CHANNEL_DESCRIPTION"  // todo translation
-
         const val INTENT_TYPE_EXTRA = "INTENT_TYPE_EXTRA"
         const val INTENT_TASK_ID_EXTRA = "INTENT_TASK_ID_EXTRA"
         private const val JOB_ID = 9999
@@ -86,16 +87,20 @@ class NotificationService : JobIntentService() {
 
 
     private fun notificationBuilder(task: FlatTaskDTO): NotificationCompat.Builder {
-        // todo get label Icon and set as smallIcon
+        val icon = task.label.icon
+        val resource = if (icon.isEmpty()) {
+            R.drawable.ic_launcher_foreground
+        } else {
+            icon.toInt()
+        }
         return NotificationCompat.Builder(application, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_add_24px)
+            .setSmallIcon(resource)
             .setContentTitle(task.name)
             .setContentText(task.description)
             .setContentIntent(tapAction(task))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
     }
 
-    // todo channels per type
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = CHANNEL_NAME
@@ -135,7 +140,12 @@ class NotificationService : JobIntentService() {
 
         println(intent.extras.toString())
 
-        return PendingIntent.getActivity(application, requestCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(
+            application,
+            requestCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     private fun requestCode(): Int {

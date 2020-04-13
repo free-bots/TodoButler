@@ -173,7 +173,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
         viewModel.isPinned.observe(viewLifecycleOwner, Observer {
             // todo set icon and text on menu
-            // todo notification service
         })
 
         viewModel.labelIcon.observe(viewLifecycleOwner, Observer {
