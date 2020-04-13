@@ -27,17 +27,6 @@ import to.freebots.todobutler.models.entities.Reminder
 import to.freebots.todobutler.viewmodels.TaskViewModel
 import java.util.*
 
-
-/*
-
-todo add swipe refresh layout and update with swipe
-
-
-
-
- */
-
-
 /**
  * [Fragment] to show the details of a task.
  */

@@ -37,7 +37,7 @@ class AttachmentService(application: Application, private val storageService: St
     }
 
     fun updateAll(e: MutableList<Attachment>): MutableList<Attachment> {
-        // todo db request
+        attachmentDAO.updateAll(e)
         return e
     }
 
@@ -47,8 +47,11 @@ class AttachmentService(application: Application, private val storageService: St
         return e
     }
 
-    fun deleteAllByIds(id: List<Long>) {
-
+    fun deleteAll(attachments: MutableList<Attachment>) {
+        attachments.forEach {
+            storageService.removeFile(it.path)
+        }
+        attachmentDAO.deleteAll(attachments)
     }
 
     fun createRx1(uri: Uri, taskId: Long): Observable<Attachment> {

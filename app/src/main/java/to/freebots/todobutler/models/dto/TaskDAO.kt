@@ -25,11 +25,11 @@ abstract class TaskDAO : BaseDAO<Task> {
 
     @Transaction
     @Query("SELECT * from Task WHERE parentTaskId =:parent AND id=:id")
-    abstract fun findByIdDTO(parent: Long?, id: Long): TaskDTO
+    abstract fun findByIdAndParentDTO(parent: Long?, id: Long): TaskDTO
 
     @Transaction
     @Query("SELECT * from Task WHERE id=:id")
-    abstract fun findByIdDTO1(id: Long): TaskDTO
+    abstract fun findByIdDTO(id: Long): TaskDTO
 
     @Transaction
     @Query("SELECT * from Task WHERE parentTaskId ISNULL")

@@ -1,9 +1,7 @@
 package to.freebots.todobutler.models.dto
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Flowable
 import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Attachment
@@ -31,4 +29,10 @@ interface AttachmentDAO : BaseDAO<Attachment> {
 
     @Insert
     fun createAll(attachments: MutableList<Attachment>): MutableList<Long>
+
+    @Update
+    fun updateAll(attachments: MutableList<Attachment>): Int
+
+    @Delete
+    fun deleteAll(attachments: MutableList<Attachment>)
 }

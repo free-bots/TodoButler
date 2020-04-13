@@ -244,14 +244,14 @@ class TaskViewModel(application: Application) : BaseViewModel(application) {
 
         if (updateObservable != null) {
             subscribe(
-                updateObservable.flatMap { flatTaskService.createAsync(default) }
+                updateObservable.flatMap { flatTaskService.createRx(default) }
                     .subscribe { t: FlatTaskDTO? ->
                         t?.let {
                             navigate(t)
                         }
                     })
         } else {
-            subscribe(flatTaskService.createAsync(default).subscribe { t: FlatTaskDTO? ->
+            subscribe(flatTaskService.createRx(default).subscribe { t: FlatTaskDTO? ->
                 t?.let {
                     navigate(t)
                 }
@@ -282,7 +282,7 @@ class TaskViewModel(application: Application) : BaseViewModel(application) {
                 mutableListOf(),
                 null
             )
-        return flatTaskService.createAsync(default).doOnError(errorHandler)
+        return flatTaskService.createRx(default).doOnError(errorHandler)
     }
 
 
