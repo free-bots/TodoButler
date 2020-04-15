@@ -2,6 +2,7 @@ package to.freebots.todobutler.fragments
 
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -59,6 +60,11 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
         viewModel.attachments.observe(
             viewLifecycleOwner,
             Observer { attachments: MutableList<Attachment> ->
+                if (attachments.isEmpty()) {
+                    iv_empty_attachment.visibility = View.VISIBLE
+                } else {
+                    iv_empty_attachment.visibility = View.GONE
+                }
                 adapter.attachments = attachments
             })
 
@@ -126,12 +132,26 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
     }
 
     override fun edit(attachment: Attachment) {
-        viewModel.getUri(attachment)
+//        viewModel.getUri(attachment)
     }
 
     override fun open(attachment: Attachment) {
-        exportFile()
-        viewModel.selectedAttachment.postValue(attachment)
+        AlertDialog.Builder(context)
+            .setMessage("Files")
+            .setPositiveButton("OPEN") { _, _ ->
+                exportFile()
+                viewModel.selectedAttachment.postValue(attachment)
+            }
+            .setNeutralButton("SHARE") { _, _ ->
+                viewModel.getUri(attachment)
+            }
+            .setNegativeButton("DELETE") { _, _ ->
+                viewModel.delete(attachment)
+            }
+            .create()
+            .show()
+//        exportFile()
+//        viewModel.selectedAttachment.postValue(attachment)
     }
 
     private fun addListener() {

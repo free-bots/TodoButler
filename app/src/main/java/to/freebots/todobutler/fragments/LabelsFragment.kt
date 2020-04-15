@@ -70,6 +70,11 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
 
         viewModel.labels.observe(viewLifecycleOwner, Observer { t: MutableList<Label> ->
+            if (t.isEmpty()) {
+                iv_empty_labels.visibility = View.VISIBLE
+            } else {
+                iv_empty_labels.visibility = View.GONE
+            }
             labelsAdapter.labels = t
         })
     }

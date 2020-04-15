@@ -35,6 +35,11 @@ class TasksFromLabelFragment : BaseTaskFragment() {
 
     override fun setTasksObserver(adapter: TasksAdapter) {
         viewModel.flatTasks.observe(viewLifecycleOwner, Observer { t ->
+            if (t.isEmpty()) {
+                iv_empty_tasks.visibility = View.VISIBLE
+            } else {
+                iv_empty_tasks.visibility = View.GONE
+            }
             adapter.tasks = viewModel.filterByLabel(t)
         })
     }
