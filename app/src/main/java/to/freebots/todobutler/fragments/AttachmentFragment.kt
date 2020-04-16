@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.content_attachments.*
 import kotlinx.android.synthetic.main.fragment_attachment.*
+import to.freebots.iconhelper.IconHelper
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.AttachmentsAdapter
 import to.freebots.todobutler.models.entities.Attachment
@@ -61,6 +62,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
             viewLifecycleOwner,
             Observer { attachments: MutableList<Attachment> ->
                 if (attachments.isEmpty()) {
+                    iv_empty_attachment.setImageResource(IconHelper.randomEmptyIcon())
                     iv_empty_attachment.visibility = View.VISIBLE
                 } else {
                     iv_empty_attachment.visibility = View.GONE

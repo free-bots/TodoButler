@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.fragment_icon.*
+import to.freebots.iconhelper.IconHelper
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.IconAdapter
 
@@ -14,19 +15,7 @@ class IconChooserFragment : DialogFragment() {
 
     companion object {
         // todo add icons
-        val icons: List<Int> = listOf(
-            R.drawable.ic_add_24px,
-            R.drawable.ic_attach_file_black_18dp,
-            R.drawable.ic_color_lens_black_18dp,
-            R.drawable.ic_delete_outline_black_18dp,
-            R.drawable.ic_file_copy_black_18dp,
-            R.drawable.ic_gps_fixed_black_18dp,
-            R.drawable.ic_launcher_foreground,
-            R.drawable.ic_list_add_black_18dp,
-            R.drawable.ic_location_on_black_18dp,
-            R.drawable.ic_notifications_none_black_18dp,
-            R.drawable.ic_notifications_off_black_18dp
-        )
+        val icons: List<Int> = IconHelper.labelIcons()
 
 
         fun instance(listener: SelectionListener? = null): IconChooserFragment {

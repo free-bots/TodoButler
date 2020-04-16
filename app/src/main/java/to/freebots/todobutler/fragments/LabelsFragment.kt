@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
+import to.freebots.iconhelper.IconHelper
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.LabelsAdapter
 import to.freebots.todobutler.models.entities.Label
@@ -71,6 +72,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
         viewModel.labels.observe(viewLifecycleOwner, Observer { t: MutableList<Label> ->
             if (t.isEmpty()) {
+                iv_empty_labels.setImageResource(IconHelper.randomEmptyIcon())
                 iv_empty_labels.visibility = View.VISIBLE
             } else {
                 iv_empty_labels.visibility = View.GONE
