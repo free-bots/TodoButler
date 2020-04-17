@@ -2,9 +2,7 @@ package to.freebots.todobutler.fragments
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +25,29 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
     private val viewModel: LabelViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application!!)
             .create(LabelViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.menu_search, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_search -> {
+                findNavController()
+                    .navigate(R.id.searchTasksFragment)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateView(
@@ -62,11 +83,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
         addLabelFab.setOnClickListener {
 
-//            findNavController().navigate(R.id.action_labelsFragment_to_tasksFragment)
-            findNavController().navigate(R.id.action_labelsFragment_to_searchTasksFragment)
-
-//            Snackbar.make(it, "Todo", Snackbar.LENGTH_LONG).show()
-//            showInfoOfLabel(Label("new"))
+            showInfoOfLabel(Label("new", IconHelper.labelIcons().random().toString()))
         }
 
 
