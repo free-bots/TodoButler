@@ -78,5 +78,9 @@ dependencies {
     implementation 'io.nlopez.smartlocation:library:3.3.3'
     implementation 'io.nlopez.smartlocation:rx:3.3.3'
 
+    implementation 'com.mikhaellopez:rxanimation:1.0.0'
+
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
     implementation project(':app:iconhelper')
 }

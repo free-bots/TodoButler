@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:text="@string/add_attachments"
+        app:backgroundTint="@color/colorAccent"
         app:icon="@drawable/ic_add_24px"
         app:layout_anchor="@id/attachments"
         app:layout_anchorGravity="bottom|center" />

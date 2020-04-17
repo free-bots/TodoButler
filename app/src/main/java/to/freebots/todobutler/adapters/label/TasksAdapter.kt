@@ -1,11 +1,12 @@
 package to.freebots.todobutler.adapters.label
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.mikhaellopez.circularimageview.CircularImageView
 import to.freebots.todobutler.R
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 
@@ -43,12 +44,13 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
         holder.bind(
             tasks[position].name,
             "",
-            tasks[position].label.icon.toIntOrNull() ?: run { 0 }
+            tasks[position].label.icon.toIntOrNull() ?: run { 0 },
+            tasks[position].color
         )
     }
 
     class TaskHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var icon: ImageView = itemView.findViewById(R.id.iv_icon)
+        var icon: CircularImageView = itemView.findViewById(R.id.iv_icon)
         var info: TextView = itemView.findViewById(R.id.tv_task_info)
         var time: TextView = itemView.findViewById(R.id.tv_time)
 
@@ -63,11 +65,18 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
         fun bind(
             info: String,
             time: String? = null,
-            icon: Int
+            icon: Int,
+            color: String?
         ) {
             this.info.text = info
             this.time.text = time
             this.icon.setImageResource(icon)
+            if (color.isNullOrBlank()) {
+                this.icon.borderColor = -1
+            } else {
+                this.icon.borderColor = Color.parseColor(color)
+            }
+
         }
     }
 

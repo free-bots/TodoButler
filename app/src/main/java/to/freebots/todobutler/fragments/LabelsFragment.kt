@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.mikhaellopez.rxanimation.fadeIn
+import com.mikhaellopez.rxanimation.fadeOut
 import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
 import to.freebots.iconhelper.IconHelper
@@ -82,7 +84,6 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         rv_label.adapter = labelsAdapter
 
         addLabelFab.setOnClickListener {
-
             showInfoOfLabel(Label("new", IconHelper.labelIcons().random().toString()))
         }
 
@@ -91,8 +92,11 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
             if (t.isEmpty()) {
                 iv_empty_labels.setImageResource(IconHelper.randomEmptyIcon())
                 iv_empty_labels.visibility = View.VISIBLE
+                iv_empty_labels.fadeIn()
             } else {
-                iv_empty_labels.visibility = View.GONE
+                iv_empty_labels.fadeOut().subscribe {
+                    iv_empty_labels.visibility = View.GONE
+                }
             }
             labelsAdapter.labels = t
         })

@@ -7,8 +7,6 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import to.freebots.todobutler.common.mock.Mock
 import to.freebots.todobutler.models.dto.*
 import to.freebots.todobutler.models.entities.*
 
@@ -38,12 +36,12 @@ abstract class Database : RoomDatabase() {
 
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    database.clearAllTables()
-                    Mock.applyToDatabase(database)
-                }
-            }
+//            INSTANCE?.let { database ->
+//                scope.launch {
+//                    database.clearAllTables()
+//                    Mock.applyToDatabase(database)
+//                }
+//            }
         }
     }
 

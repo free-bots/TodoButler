@@ -14,11 +14,18 @@
         android:layout_height="wrap_content"
         android:text="Label info" />
 
-    <ImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_gravity="center"
         android:id="@+id/labelIconIV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_background"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_death"
+        app:civ_border_width="4dp"
+        app:civ_shadow_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
