@@ -18,6 +18,7 @@
     <string name="search">Search</string>
     <string name="tasks_from_label">Tasks from label</string>
     <string name="task_detail">Task detail</string>
+    <string name="info_page">Info</string>
 
     <!-- empty -->
     <string name="empty_attachments">no attachments</string>
@@ -25,4 +26,30 @@
     <string name="empty_tasks">no tasks</string>
     <string name="empty_sub_tasks">no subtasks</string>
     <string name="empty_search">404 tasks not found :)</string>
+
+
+    <!-- license -->
+    <string name="aboutLibraries_description_text">
+        TodoButler is a simple todo app. Feel free to contribute.
+    </string>
+
+    <string name="developer_title">Developer</string>
+    <string name="developer">
+        <div>
+            Check out the code at GitHub:
+            <a href="https://github.com/free-bots/TodoButler" title="TodoButler">https://github.com/free-bots/TodoButler</a>
+        </div>
+    </string>
+
+    <string name="icons_title">Icons made by</string>
+    <string name="icons_license">
+        <div>Icons made by
+            <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+            from
+            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+        </div>
+        <div> And Material Icons
+            <a href="https://material.io/icons" title="Material Icons">Material Icons</a>
+        </div>
+    </string>
 </resources>

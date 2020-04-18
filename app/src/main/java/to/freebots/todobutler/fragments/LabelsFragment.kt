@@ -3,7 +3,6 @@ package to.freebots.todobutler.fragments
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,7 +47,8 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
                 return true
             }
             R.id.menu_info -> {
-                Toast.makeText(context, "INFO", Toast.LENGTH_LONG).show()
+                findNavController()
+                    .navigate(R.id.action_labelsFragment_to_infoFragment)
                 return true
             }
         }

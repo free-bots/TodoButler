@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: "androidx.navigation.safeargs"
 
+apply plugin: 'com.mikepenz.aboutlibraries.plugin'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -72,7 +74,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     implementation 'com.github.dhaval2404:colorpicker:1.0'
-    implementation 'com.michalsvec:single-row-calednar:1.0.0'
+//    implementation 'com.michalsvec:single-row-calednar:1.0.0'
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
 
     implementation 'io.nlopez.smartlocation:library:3.3.3'
@@ -81,6 +83,10 @@ dependencies {
     implementation 'com.mikhaellopez:rxanimation:1.0.0'
 
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
+    implementation "com.mikepenz:aboutlibraries-core:8.1.1"
+    implementation "com.mikepenz:aboutlibraries:8.1.1"
+//    implementation "androidx.cardview:cardview:1.1.0"
 
     implementation project(':app:iconhelper')
 }
