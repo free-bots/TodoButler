@@ -81,4 +81,6 @@ class StorageService(private val application: Application) {
     fun freeSpace(): Long = storage().freeSpace
 
     fun file(name: String) = File(storage(), name)
+
+    fun fileExtension(uri: Uri): String = uri.lastPathSegment!!.substringAfter(".")
 }

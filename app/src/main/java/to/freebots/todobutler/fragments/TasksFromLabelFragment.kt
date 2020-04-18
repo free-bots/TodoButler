@@ -8,9 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks_from_label.*
-import to.freebots.iconhelper.IconHelper
+import kotlinx.android.synthetic.main.layout_empty.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
+import to.freebots.todobutler.common.BindingConverter
 import to.freebots.todobutler.common.fragment.BaseTaskFragment
 
 /**
@@ -54,12 +55,7 @@ class TasksFromLabelFragment : BaseTaskFragment() {
 
     override fun setTasksObserver(adapter: TasksAdapter) {
         viewModel.flatTasks.observe(viewLifecycleOwner, Observer { t ->
-            if (t.isEmpty()) {
-                iv_empty_tasks.setImageResource(IconHelper.randomEmptyIcon())
-                iv_empty_tasks.visibility = View.VISIBLE
-            } else {
-                iv_empty_tasks.visibility = View.GONE
-            }
+            BindingConverter.showEmptyIcon(iv_empty, t, tv_empty, getString(R.string.empty_tasks))
             adapter.tasks = viewModel.filterByLabel(t)
         })
     }

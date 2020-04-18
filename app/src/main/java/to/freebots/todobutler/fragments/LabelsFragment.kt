@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
-import com.mikhaellopez.rxanimation.fadeIn
-import com.mikhaellopez.rxanimation.fadeOut
 import kotlinx.android.synthetic.main.content_labels.*
 import kotlinx.android.synthetic.main.fragment_labels.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import to.freebots.iconhelper.IconHelper
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.LabelsAdapter
+import to.freebots.todobutler.common.BindingConverter
 import to.freebots.todobutler.models.entities.Label
 import to.freebots.todobutler.viewmodels.LabelViewModel
 
@@ -38,7 +37,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_search_and_info, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -46,6 +45,10 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
             R.id.menu_search -> {
                 findNavController()
                     .navigate(R.id.action_labelsFragment_to_searchTasksFragment)
+                return true
+            }
+            R.id.menu_info -> {
+                Toast.makeText(context, "INFO", Toast.LENGTH_LONG).show()
                 return true
             }
         }
@@ -65,12 +68,10 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         val labelsAdapter = LabelsAdapter()
         labelsAdapter.action = object : LabelsAdapter.Action {
             override fun edit(label: Label) {
-                Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
                 showInfoOfLabel(label)
             }
 
             override fun open(label: Label) {
-                Snackbar.make(this@LabelsFragment.view!!, label.name, Snackbar.LENGTH_LONG).show()
                 val bundle = Bundle().apply {
                     putParcelable("label", label)
                 }
@@ -89,15 +90,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
 
 
         viewModel.labels.observe(viewLifecycleOwner, Observer { t: MutableList<Label> ->
-            if (t.isEmpty()) {
-                iv_empty_labels.setImageResource(IconHelper.randomEmptyIcon())
-                iv_empty_labels.visibility = View.VISIBLE
-                iv_empty_labels.fadeIn()
-            } else {
-                iv_empty_labels.fadeOut().subscribe {
-                    iv_empty_labels.visibility = View.GONE
-                }
-            }
+            BindingConverter.showEmptyIcon(iv_empty, t, tv_empty, getString(R.string.empty_labels))
             labelsAdapter.labels = t
         })
     }
@@ -111,7 +104,6 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
     }
 
     override fun labelInfo(label: Label) {
-        Toast.makeText(context, label.name, Toast.LENGTH_LONG).show()
         viewModel.newLabelValues(label)
     }
 

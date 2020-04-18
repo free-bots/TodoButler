@@ -41,7 +41,7 @@ class AttachmentsAdapter : RecyclerView.Adapter<AttachmentsAdapter.AttachmentHol
     }
 
     override fun onBindViewHolder(holder: AttachmentHolder, position: Int) {
-        holder.bind()
+        holder.bind(attachments[position].name)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -92,9 +92,9 @@ class AttachmentsAdapter : RecyclerView.Adapter<AttachmentsAdapter.AttachmentHol
             itemView.setOnLongClickListener(longClickListener)
         }
 
-        fun bind() {
-            this.name.text = "DEMO"
-            this.icon.setImageResource(R.drawable.ic_add_24px)
+        fun bind(name: String) {
+            this.name.text = name
+            this.icon.setImageResource(R.drawable.ic_attachment)
         }
     }
 }

@@ -1,6 +1,7 @@
 package to.freebots.todobutler.adapters.label
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,9 +44,10 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
     override fun onBindViewHolder(holder: TaskHolder, position: Int) {
         holder.bind(
             tasks[position].name,
-            "",
+            tasks[position].createdAt?.toString(),
             tasks[position].label.icon.toIntOrNull() ?: run { 0 },
-            tasks[position].color
+            tasks[position].color,
+            tasks[position].isCompleted
         )
     }
 
@@ -66,7 +68,8 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
             info: String,
             time: String? = null,
             icon: Int,
-            color: String?
+            color: String?,
+            completed: Boolean
         ) {
             this.info.text = info
             this.time.text = time
@@ -76,7 +79,11 @@ class TasksAdapter : RecyclerView.Adapter<TasksAdapter.TaskHolder>(), View.OnCli
             } else {
                 this.icon.borderColor = Color.parseColor(color)
             }
-
+            this.info.paintFlags = if (completed) {
+                this.info.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                this.info.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
         }
     }
 

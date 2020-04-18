@@ -18,16 +18,14 @@
         app:spanCount="3"
         tools:listitem="@layout/layout_icon" />
 
-    <ImageView
-        android:id="@+id/iv_empty_attachment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <include
+        layout="@layout/layout_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_attach_file_black_18dp"
         tools:layout_editor_absoluteX="120dp"
         tools:layout_editor_absoluteY="261dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

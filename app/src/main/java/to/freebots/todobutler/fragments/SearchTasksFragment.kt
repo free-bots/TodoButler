@@ -9,8 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.content_tasks.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
+import to.freebots.todobutler.common.BindingConverter
 import to.freebots.todobutler.common.fragment.BaseTaskFragment
 import to.freebots.todobutler.databinding.FragmentSearchTasksBinding
 
@@ -23,6 +25,7 @@ class SearchTasksFragment : BaseTaskFragment() {
         this.viewModel.flatTasks.observe(viewLifecycleOwner, Observer {  })
         this.viewModel.searchedTasks.observe(viewLifecycleOwner, Observer {
             println(it.size)
+            BindingConverter.showEmptyIcon(iv_empty, it, tv_empty, getString(R.string.empty_search))
             adapter.tasks = it
         })
     }
@@ -41,6 +44,8 @@ class SearchTasksFragment : BaseTaskFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        BindingConverter.showEmptyIcon(iv_empty, null, tv_empty, getString(R.string.empty_search))
 
         initTaskAdapter(rv_tasks, R.id.action_searchTasksFragment_to_taskFragment)
 

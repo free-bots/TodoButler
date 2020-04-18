@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/labelsFragment"
         android:name="to.freebots.todobutler.fragments.LabelsFragment"
-        android:label="fragment_labels"
+        android:label="@string/label"
         tools:layout="@layout/fragment_labels" >
         <action
             android:id="@+id/action_labelsFragment_to_tasksFromLabelFragment"
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/tasksFromLabelFragment"
         android:name="to.freebots.todobutler.fragments.TasksFromLabelFragment"
-        android:label="fragment_tasks_from_label"
+        android:label="@string/tasks_from_label"
         tools:layout="@layout/fragment_tasks_from_label" >
         <action
             android:id="@+id/action_tasksFromLabelFragment_to_taskFragment"
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/taskFragment"
         android:name="to.freebots.todobutler.fragments.TaskFragment"
-        android:label="fragment_task"
+        android:label="@string/task_detail"
         tools:layout="@layout/fragment_task" >
         <action
             android:id="@+id/action_taskFragment_self"
@@ -82,12 +82,12 @@
     <fragment
         android:id="@+id/attachmentFragment"
         android:name="to.freebots.todobutler.fragments.AttachmentFragment"
-        android:label="fragment_attachment"
+        android:label="@string/attachments"
         tools:layout="@layout/fragment_attachment" />
     <fragment
         android:id="@+id/tasksFragment"
         android:name="to.freebots.todobutler.fragments.TasksFragment"
-        android:label="TasksFragment" >
+        android:label="@string/tasks" >
         <action
             android:id="@+id/action_tasksFragment_to_taskFragment"
             app:destination="@id/taskFragment"
@@ -99,7 +99,7 @@
     <fragment
         android:id="@+id/searchTasksFragment"
         android:name="to.freebots.todobutler.fragments.SearchTasksFragment"
-        android:label="fragment_search_tasks"
+        android:label="@string/search"
         tools:layout="@layout/fragment_search_tasks" >
         <action
             android:id="@+id/action_searchTasksFragment_to_taskFragment"
@@ -112,6 +112,6 @@
     <fragment
         android:id="@+id/locationFragment"
         android:name="to.freebots.todobutler.fragments.LocationFragment"
-        android:label="fragment_location"
+        android:label="@string/location"
         tools:layout="@layout/fragment_location" />
 </navigation>

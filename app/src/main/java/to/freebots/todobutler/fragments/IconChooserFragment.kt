@@ -14,9 +14,7 @@ class IconChooserFragment : DialogFragment() {
     var selectionListener: SelectionListener? = null
 
     companion object {
-        // todo add icons
         val icons: List<Int> = IconHelper.labelIcons()
-
 
         fun instance(listener: SelectionListener? = null): IconChooserFragment {
             return IconChooserFragment().apply {

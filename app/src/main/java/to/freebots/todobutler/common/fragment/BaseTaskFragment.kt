@@ -37,7 +37,6 @@ abstract class BaseTaskFragment : Fragment() {
     }
 
     protected fun getLabel(): Label? {
-        // Todo overwrite with default if not needed
         return arguments?.getParcelable("label")
     }
 

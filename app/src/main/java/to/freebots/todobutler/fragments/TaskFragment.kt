@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TimePicker
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,8 +19,10 @@ import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import kotlinx.android.synthetic.main.content_tasks.*
 import kotlinx.android.synthetic.main.fragment_task.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import to.freebots.todobutler.R
 import to.freebots.todobutler.adapters.label.TasksAdapter
+import to.freebots.todobutler.common.BindingConverter
 import to.freebots.todobutler.databinding.FragmentTaskBinding
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Reminder
@@ -90,24 +91,26 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                     .setColorShape(ColorShape.SQAURE)    // Default ColorShape.CIRCLE
                     .setColorSwatch(ColorSwatch._300)    // Default ColorSwatch._500
                     .setDefaultColor(defaultColor)
-                    .setColors(listOf(
-                         getString(R.color.nord0),
-                         getString(R.color.nord1),
-                         getString(R.color.nord2),
-                         getString(R.color.nord3),
-                         getString(R.color.nord4),
-                         getString(R.color.nord5),
-                         getString(R.color.nord6),
-                         getString(R.color.nord7),
-                         getString(R.color.nord8),
-                         getString(R.color.nord9),
-                         getString(R.color.nord10),
-                         getString(R.color.nord11),
-                         getString(R.color.nord12),
-                         getString(R.color.nord13),
-                         getString(R.color.nord14),
-                         getString(R.color.nord15)
-                    ))
+                    .setColors(
+                        listOf(
+                            getString(R.color.nord0),
+                            getString(R.color.nord1),
+                            getString(R.color.nord2),
+                            getString(R.color.nord3),
+                            getString(R.color.nord4),
+                            getString(R.color.nord5),
+                            getString(R.color.nord6),
+                            getString(R.color.nord7),
+                            getString(R.color.nord8),
+                            getString(R.color.nord9),
+                            getString(R.color.nord10),
+                            getString(R.color.nord11),
+                            getString(R.color.nord12),
+                            getString(R.color.nord13),
+                            getString(R.color.nord14),
+                            getString(R.color.nord15)
+                        )
+                    )
                     .setColorListener { _, colorHex ->
                         // Handle Color Selection
                         this.viewModel.color.postValue(colorHex)
@@ -183,7 +186,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
         viewModel._task.observe(viewLifecycleOwner, Observer {
             showSubTasks(it.subTasks)
-            Toast.makeText(context, it.name, Toast.LENGTH_LONG).show()
         })
 
         viewModel.navigate.observe(viewLifecycleOwner, Observer {
@@ -252,6 +254,12 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     private fun showSubTasks(subTasks: MutableList<FlatTaskDTO>) {
+        BindingConverter.showEmptyIcon(
+            iv_empty,
+            subTasks,
+            tv_empty,
+            getString(R.string.empty_sub_tasks)
+        )
         if (rv_tasks.adapter == null) {
             rv_tasks.adapter = TasksAdapter().apply {
                 action = this@TaskFragment
@@ -261,11 +269,9 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     }
 
     override fun edit(flatTaskDTO: FlatTaskDTO) {
-        Toast.makeText(this.context, "edit subtask", Toast.LENGTH_LONG).show()
     }
 
     override fun open(flatTaskDTO: FlatTaskDTO) {
-        Toast.makeText(this.context, "open subtask", Toast.LENGTH_LONG).show()
         viewModel.navigate(flatTaskDTO)
     }
 
@@ -285,7 +291,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
     private fun applyColor() {
         this.viewModel.color.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
-                // todo reset color ?
+                task_root.setBackgroundResource(R.color.colorPrimary)
                 return@Observer
             }
 

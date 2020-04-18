@@ -9,4 +9,20 @@
     <string name="add_label">label</string>
     <string name="add_task">task</string>
     <string name="add_attachments">attachment</string>
+
+    <!-- page names -->
+    <string name="label">Label</string>
+    <string name="tasks">Tasks</string>
+    <string name="location">Location</string>
+    <string name="attachments">Attachments</string>
+    <string name="search">Search</string>
+    <string name="tasks_from_label">Tasks from label</string>
+    <string name="task_detail">Task detail</string>
+
+    <!-- empty -->
+    <string name="empty_attachments">no attachments</string>
+    <string name="empty_labels">no labels</string>
+    <string name="empty_tasks">no tasks</string>
+    <string name="empty_sub_tasks">no subtasks</string>
+    <string name="empty_search">404 tasks not found :)</string>
 </resources>
