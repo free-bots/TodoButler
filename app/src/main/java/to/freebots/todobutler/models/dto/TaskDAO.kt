@@ -8,7 +8,7 @@ import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
 
 @Dao
-abstract class TaskDAO : BaseDAO<Task> {
+abstract class TaskDAO : BaseDAO<Task>() {
 
     @Query("SELECT * from Task")
     abstract fun findAll(): MutableList<Task>

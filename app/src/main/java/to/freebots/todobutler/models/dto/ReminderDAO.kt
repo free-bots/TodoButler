@@ -7,7 +7,7 @@ import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Reminder
 
 @Dao
-abstract class ReminderDAO : BaseDAO<Reminder> {
+abstract class ReminderDAO : BaseDAO<Reminder>() {
 
     @Query("SELECT * FROM Reminder")
     abstract fun findAll(): MutableList<Reminder>

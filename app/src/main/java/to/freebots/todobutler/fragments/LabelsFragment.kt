@@ -45,7 +45,7 @@ class LabelsFragment : Fragment(), LabelDialogFragment.EditListener {
         when (item.itemId) {
             R.id.menu_search -> {
                 findNavController()
-                    .navigate(R.id.searchTasksFragment)
+                    .navigate(R.id.action_labelsFragment_to_searchTasksFragment)
                 return true
             }
         }

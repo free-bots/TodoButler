@@ -2,16 +2,27 @@ package to.freebots.todobutler.common.dao
 
 import androidx.room.*
 import to.freebots.todobutler.common.entities.BaseEntity
+import java.util.*
 
 @Dao
-interface BaseDAO<E: BaseEntity> {
+abstract class BaseDAO<E : BaseEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun create(e: E): Long
+    abstract fun createInDB(e: E): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(e: E): Int
+    abstract fun updateInDB(e: E): Int
 
     @Delete
-    fun delete(e: E): Int
+    abstract fun delete(e: E): Int
+
+    @Transaction
+    open fun create(e: E): Long {
+        return createInDB(e.apply { createdAt = Date() })
+    }
+
+    @Transaction
+    open fun update(e: E): Int {
+        return updateInDB(e.apply { updatedAt = Date() })
+    }
 }

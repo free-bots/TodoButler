@@ -28,7 +28,7 @@ class TasksFromLabelFragment : BaseTaskFragment() {
         when (item.itemId) {
             R.id.menu_search -> {
                 findNavController()
-                    .navigate(R.id.searchTasksFragment)
+                    .navigate(R.id.action_tasksFromLabelFragment_to_searchTasksFragment)
                 return true
             }
         }

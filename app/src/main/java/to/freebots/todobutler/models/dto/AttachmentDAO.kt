@@ -7,32 +7,32 @@ import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Attachment
 
 @Dao
-interface AttachmentDAO : BaseDAO<Attachment> {
+abstract class AttachmentDAO : BaseDAO<Attachment>() {
 
     @Query("SELECT * from Attachment")
-    fun findAll(): MutableList<Attachment>
+    abstract fun findAll(): MutableList<Attachment>
 
     @Query("SELECT * FROM Attachment WHERE id=:id")
-    fun findById(id: Long): Attachment
+    abstract fun findById(id: Long): Attachment
 
     @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
-    fun findAllByTaskId(taskId: Long): MutableList<Attachment>
+    abstract fun findAllByTaskId(taskId: Long): MutableList<Attachment>
 
     @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
-    fun findAllByTaskIdFlowable(taskId: Long): Flowable<MutableList<Attachment>>
+    abstract fun findAllByTaskIdFlowable(taskId: Long): Flowable<MutableList<Attachment>>
 
     @Query("SELECT * FROM ATTACHMENT WHERE taskId=:taskId")
-    fun findAllByTaskIdLiveData(taskId: Long): LiveData<MutableList<Attachment>>
+    abstract fun findAllByTaskIdLiveData(taskId: Long): LiveData<MutableList<Attachment>>
 
     @Query("SELECT * FROM Attachment WHERE rowid=:rowIndex")
-    fun findByRowIndex(rowIndex: Long): Attachment
+    abstract fun findByRowIndex(rowIndex: Long): Attachment
 
     @Insert
-    fun createAll(attachments: MutableList<Attachment>): MutableList<Long>
+    abstract fun createAll(attachments: MutableList<Attachment>): MutableList<Long>
 
     @Update
-    fun updateAll(attachments: MutableList<Attachment>): Int
+    abstract fun updateAll(attachments: MutableList<Attachment>): Int
 
     @Delete
-    fun deleteAll(attachments: MutableList<Attachment>)
+    abstract fun deleteAll(attachments: MutableList<Attachment>)
 }

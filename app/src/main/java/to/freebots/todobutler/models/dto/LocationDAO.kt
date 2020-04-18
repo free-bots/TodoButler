@@ -7,7 +7,7 @@ import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Location
 
 @Dao
-abstract class LocationDAO : BaseDAO<Location> {
+abstract class LocationDAO : BaseDAO<Location>() {
 
     @Query("SELECT * FROM Location")
     abstract fun findAll(): MutableList<Location>

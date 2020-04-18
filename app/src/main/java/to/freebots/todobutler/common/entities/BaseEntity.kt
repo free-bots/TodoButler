@@ -10,14 +10,4 @@ abstract class BaseEntity(
     var id: Long?,
     var createdAt: Date? = null,
     var updatedAt: Date? = null
-) {
-
-    fun prepareSave(): BaseEntity {
-        if (this.createdAt == null) {
-            this.createdAt = Date()
-        }
-        this.updatedAt = Date()
-
-        return this
-    }
-}
+)

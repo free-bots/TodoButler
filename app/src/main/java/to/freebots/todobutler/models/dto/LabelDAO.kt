@@ -7,17 +7,17 @@ import to.freebots.todobutler.common.dao.BaseDAO
 import to.freebots.todobutler.models.entities.Label
 
 @Dao
-interface LabelDAO : BaseDAO<Label> {
+abstract class LabelDAO : BaseDAO<Label>() {
 
     @Query("SELECT * from Label")
-    fun findAllLiveData(): LiveData<MutableList<Label>>
+    abstract fun findAllLiveData(): LiveData<MutableList<Label>>
 
     @Query("SELECT * from Label")
-    fun findAll(): MutableList<Label>
+    abstract fun findAll(): MutableList<Label>
 
     @Query("SELECT * FROM Label WHERE id=:id")
-    fun findById(id: Long): Label
+    abstract fun findById(id: Long): Label
 
     @Query("SELECT * FROM LABEL WHERE rowid=:rowIndex")
-    fun findByRowIndex(rowIndex: Long): Label
+    abstract fun findByRowIndex(rowIndex: Long): Label
 }
