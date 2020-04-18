@@ -1,6 +1,7 @@
 package to.freebots.todobutler.fragments
 
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
@@ -74,6 +75,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
     }
 
+    @SuppressLint("ResourceType")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
@@ -88,6 +90,24 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                     .setColorShape(ColorShape.SQAURE)    // Default ColorShape.CIRCLE
                     .setColorSwatch(ColorSwatch._300)    // Default ColorSwatch._500
                     .setDefaultColor(defaultColor)
+                    .setColors(listOf(
+                         getString(R.color.nord0),
+                         getString(R.color.nord1),
+                         getString(R.color.nord2),
+                         getString(R.color.nord3),
+                         getString(R.color.nord4),
+                         getString(R.color.nord5),
+                         getString(R.color.nord6),
+                         getString(R.color.nord7),
+                         getString(R.color.nord8),
+                         getString(R.color.nord9),
+                         getString(R.color.nord10),
+                         getString(R.color.nord11),
+                         getString(R.color.nord12),
+                         getString(R.color.nord13),
+                         getString(R.color.nord14),
+                         getString(R.color.nord15)
+                    ))
                     .setColorListener { _, colorHex ->
                         // Handle Color Selection
                         this.viewModel.color.postValue(colorHex)
@@ -109,7 +129,6 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                         )
                     }
                 }
-//                findNavController().navigate(R.id.action_taskFragment_to_locationFragment)
                 return true
             }
             R.id.menu_subtask -> {

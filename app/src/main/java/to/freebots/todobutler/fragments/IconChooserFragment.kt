@@ -38,7 +38,7 @@ class IconChooserFragment : DialogFragment() {
 
         rv_icons.adapter = IconAdapter().apply {
             items = icons.toMutableList()
-            action = object : IconAdapter.Action{
+            action = object : IconAdapter.Action {
                 override fun onOpen(icon: Int) {
                     selectionListener?.onIcon(icon.toString())
 

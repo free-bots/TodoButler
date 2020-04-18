@@ -1,11 +1,29 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:colorBackground">@color/colorPrimary</item>
+
+        <item name="extendedFloatingActionButtonStyle">@style/ExtendedFloatingActionButtonTheme
+        </item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
+    </style>
+
+    <style name="ExtendedFloatingActionButtonTheme" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="FloatingActionButtonTheme" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Launcher" parent="AppTheme">
+        <item name="background">@color/colorPrimary</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
 </resources>
