@@ -11,6 +11,10 @@
         <item name="extendedFloatingActionButtonStyle">@style/ExtendedFloatingActionButtonTheme
         </item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
+
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+        <item name="android:contextPopupMenuStyle">@style/Widget.MaterialComponents.PopupMenu.ContextMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.MaterialComponents.PopupMenu.Overflow</item>
     </style>
 
     <style name="ExtendedFloatingActionButtonTheme" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
