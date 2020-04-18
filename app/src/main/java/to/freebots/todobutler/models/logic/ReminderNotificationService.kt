@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.logic.android.NotificationService
 
@@ -22,10 +21,9 @@ class ReminderNotificationService(val application: Application) {
     fun createAlarm(task: FlatTaskDTO) {
         val alarmIntent = intent(task)
 
-        // todo set time by reminder
         alarmManager.set(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 5 * 1000,
+            task.reminder!!.date.time,
             alarmIntent
         )
     }

@@ -9,7 +9,6 @@ import com.google.gson.Gson
 import io.reactivex.Observable
 import to.freebots.todobutler.common.Event
 import to.freebots.todobutler.models.entities.Attachment
-import to.freebots.todobutler.models.logic.AttachmentService
 import to.freebots.todobutler.models.logic.StorageService
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -20,9 +19,6 @@ class AttachmentViewModel(application: Application) : BaseViewModel(application)
     var selectedAttachment: MutableLiveData<Attachment> = MutableLiveData()
 
     val uri: MutableLiveData<Event<Uri>> = MutableLiveData()
-
-    private val attachmentService: AttachmentService =
-        AttachmentService(application, StorageService(application))
 
     private val _attachments: MutableLiveData<MutableList<Attachment>> = MutableLiveData()
 

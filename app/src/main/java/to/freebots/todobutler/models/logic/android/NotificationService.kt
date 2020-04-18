@@ -53,7 +53,7 @@ class NotificationService : JobIntentService() {
         super.onCreate()
         flatTaskService = FlatTaskService(
             application,
-            TaskService(application, LabelService(application)),
+            TaskService(application, LabelService(application,  null)),
             AttachmentService(application, StorageService((application))),
             LocationService(application),
             ReminderService(application)

@@ -12,21 +12,9 @@ import io.reactivex.functions.Consumer
 import to.freebots.todobutler.common.Event
 import to.freebots.todobutler.common.logic.BaseLogicService
 import to.freebots.todobutler.models.entities.*
-import to.freebots.todobutler.models.logic.*
 import java.util.*
 
 class TaskViewModel(application: Application) : BaseViewModel(application) {
-
-    private val locationService: LocationService by lazy {
-        LocationService(application)
-    }
-
-    private val reminderService: ReminderService by lazy {
-        ReminderService(application)
-    }
-
-    // todo swipeRefresh layout....
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val isEditing: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -53,20 +41,6 @@ class TaskViewModel(application: Application) : BaseViewModel(application) {
     val _task: MutableLiveData<FlatTaskDTO> = MutableLiveData()
 
     private var _filterLabel: Label? = null
-
-    private val taskService by lazy {
-        TaskService(application, LabelService(application))
-    }
-
-    private val flatTaskService by lazy {
-        FlatTaskService(
-            application,
-            taskService,
-            AttachmentService(application, StorageService((application))),
-            LocationService(application),
-            ReminderService(application)
-        )
-    }
 
     private val errorHandler = Consumer<Any> { t ->
         // todo show error message in ui

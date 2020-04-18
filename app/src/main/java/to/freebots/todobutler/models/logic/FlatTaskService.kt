@@ -260,4 +260,12 @@ class FlatTaskService(
             ReminderNotificationService(application).cancelAlarm(e)
         }
     }
+
+    fun deleteByLabelId(labelId: Long): MutableList<FlatTaskDTO> {
+        return findAll().filter {
+            it.label.id == labelId
+        }.map {
+            delete(it)
+        }.toMutableList()
+    }
 }

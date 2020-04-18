@@ -2,6 +2,7 @@ package to.freebots.todobutler.fragments
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
@@ -218,38 +219,32 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
         val calendar = Calendar.getInstance()
         calendar.time = reminder?.date ?: run { Date() }
 
-        tv_date.setOnClickListener {
-            DatePickerDialog(
-                context!!,
-                this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-
-        tv_time.setOnClickListener {
-            TimePickerDialog(
-                context!!,
-                this,
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                true
-            ).show()
-        }
-
-        b_remove_reminder.setOnClickListener {
-            viewModel.deleteReminder()
-        }
-
-
-        if (reminder != null) {
-            // todo format
-            tv_date.text = calendar.time.toString()
-            tv_time.text = calendar.time.toString()
-        } else {
-            tv_date.text = "date"
-            tv_time.text = "time"
+        b_reminder.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setMessage("Reminder")
+                .setPositiveButton("Set Date") { _, _ ->
+                    DatePickerDialog(
+                        context!!,
+                        this,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                    ).show()
+                }
+                .setNeutralButton("Set Time") { _, _ ->
+                    TimePickerDialog(
+                        context!!,
+                        this,
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true
+                    ).show()
+                }
+                .setNegativeButton("DELETE") { _, _ ->
+                    viewModel.deleteReminder()
+                }
+                .create()
+                .show()
         }
     }
 

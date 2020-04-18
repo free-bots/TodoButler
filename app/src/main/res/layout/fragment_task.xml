@@ -116,35 +116,21 @@
             layout="@layout/content_tasks"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_time"
+            app:layout_constraintBottom_toTopOf="@+id/b_reminder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rg_priority" />
 
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_date" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/b_remove_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="X"
+            android:id="@+id/b_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Reminder"
+            android:textColor="@color/nord4"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

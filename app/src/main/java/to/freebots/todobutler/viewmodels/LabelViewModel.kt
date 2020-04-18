@@ -4,13 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import to.freebots.todobutler.common.entities.BaseEntity
 import to.freebots.todobutler.models.entities.Label
-import to.freebots.todobutler.models.logic.LabelService
 
 class LabelViewModel(application: Application) : BaseViewModel(application), BaseOperations<Label> {
-
-    private val labelService: LabelService by lazy {
-        LabelService(application)
-    }
 
     val labels: LiveData<MutableList<Label>>
 
@@ -23,15 +18,15 @@ class LabelViewModel(application: Application) : BaseViewModel(application), Bas
     }
 
     override fun create(e: Label) {
-        labelService.createAsync(e)
+        subscribe(labelService.createRx(e).subscribe())
     }
 
     override fun update(e: Label) {
-        labelService.updateAsync(e)
+        subscribe(labelService.updateRx(e).subscribe())
     }
 
     override fun delete(e: Label) {
-        labelService.deleteAsync(e)
+        subscribe(labelService.deleteRx(e).subscribe())
     }
 
     fun newLabelValues(label: Label) {
