@@ -26,7 +26,9 @@ class LabelService(application: Application, var taskService: FlatTaskService?) 
     }
 
     override fun delete(e: Label): Label {
-        taskService?.deleteByLabelId(e.id!!)
+        e.id?.let {
+            taskService?.deleteByLabelId(it)
+        }
         labelDao.delete(e)
         return e
     }
