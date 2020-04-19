@@ -9,8 +9,6 @@ import to.freebots.todobutler.models.entities.Attachment
 import to.freebots.todobutler.models.entities.FlatTaskDTO
 import to.freebots.todobutler.models.entities.Task
 import to.freebots.todobutler.models.entities.TaskDTO
-import java.time.LocalDateTime
-import java.util.*
 
 class FlatTaskService(
     private val application: Application,
@@ -138,7 +136,6 @@ class FlatTaskService(
                 throw Exception("no space available")
             }
 
-            e.description = UUID.randomUUID().toString() + LocalDateTime.now().toString()
             val copy = copy(e, FlatTaskDTO::class.java) as FlatTaskDTO
 
             val tasks = mutableListOf<Task>()
