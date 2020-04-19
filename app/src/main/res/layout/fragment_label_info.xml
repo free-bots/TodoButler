@@ -13,7 +13,7 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Label info" />
+        android:text="@string/label_info" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         style="@style/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="name">
+        android:hint="@string/name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/labelNameET"
@@ -43,12 +43,12 @@
             android:ems="10"
             android:textColor="@color/nord4"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="@string/name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/ib_delete"
-        android:text="delete"
+        android:text="@string/delete"
         android:textColor="@color/nord4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

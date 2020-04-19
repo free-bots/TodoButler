@@ -28,14 +28,12 @@
             android:id="@+id/tv_task_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="TextView" />
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="TextView"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

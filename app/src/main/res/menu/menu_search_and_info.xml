@@ -6,11 +6,11 @@
         app:showAsAction="ifRoom"
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search_black_18dp"
-        android:title="Search" />
+        android:title="@string/search" />
 
     <item
         android:id="@+id/menu_info"
         android:icon="@drawable/moreinfo_arrow"
-        android:title="Info" />
+        android:title="@string/info" />
 
 </menu>

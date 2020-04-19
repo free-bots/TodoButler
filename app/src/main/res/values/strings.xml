@@ -52,4 +52,25 @@
             <a href="https://material.io/icons" title="Material Icons">Material Icons</a>
         </div>
     </string>
+
+
+    <string name="label_info">Label info</string>
+    <string name="name">Name</string>
+    <string name="delete">Delete</string>
+    <string name="choose">Choose</string>
+    <string name="description">Description</string>
+    <string name="reminder">Reminder</string>
+    <string name="info">Info</string>
+    <string name="pinned">Pinned</string>
+    <string name="not_pinned">Not Pinned</string>
+    <string name="color">Color</string>
+    <string name="add_subtask">Add Subtask</string>
+    <string name="clone">Clone</string>
+    <string name="attachment">Attachment</string>
+
+    <string name="set_time">Set time</string>
+    <string name="set_date">Set date</string>
+    <string name="files">files</string>
+    <string name="open">open</string>
+    <string name="share">share</string>
 </resources>

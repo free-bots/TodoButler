@@ -62,7 +62,12 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
         viewModel.attachments.observe(
             viewLifecycleOwner,
             Observer { attachments: MutableList<Attachment> ->
-                BindingConverter.showEmptyIcon(iv_empty, attachments, tv_empty, getString(R.string.empty_attachments))
+                BindingConverter.showEmptyIcon(
+                    iv_empty,
+                    attachments,
+                    tv_empty,
+                    getString(R.string.empty_attachments)
+                )
                 adapter.attachments = attachments
             })
 
@@ -110,7 +115,7 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*"
-            putExtra(Intent.EXTRA_TITLE, "TEST TITLE")
+            putExtra(Intent.EXTRA_TITLE, "FILE NAME")
         }
 
         startActivityForResult(intent, FILE_CREATE_REQUEST)
@@ -135,15 +140,15 @@ class AttachmentFragment : Fragment(), AttachmentsAdapter.Action {
 
     override fun open(attachment: Attachment) {
         AlertDialog.Builder(context)
-            .setMessage("Files")
-            .setPositiveButton("OPEN") { _, _ ->
+            .setMessage(getString(R.string.files))
+            .setPositiveButton(getString(R.string.open)) { _, _ ->
                 exportFile()
                 viewModel.selectedAttachment.postValue(attachment)
             }
-            .setNeutralButton("SHARE") { _, _ ->
+            .setNeutralButton(getString(R.string.share)) { _, _ ->
                 viewModel.getUri(attachment)
             }
-            .setNegativeButton("DELETE") { _, _ ->
+            .setNegativeButton(getString(R.string.delete)) { _, _ ->
                 viewModel.delete(attachment)
             }
             .create()

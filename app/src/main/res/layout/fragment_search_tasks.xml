@@ -33,7 +33,7 @@
                 android:layout_margin="5dp"
                 app:colorControlActivated="@color/nord4"
                 android:inputType="textPersonName"
-                android:hint="Search"
+                android:hint="@string/search"
                 android:text="@={model.searchQuery}">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>

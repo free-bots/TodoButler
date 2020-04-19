@@ -27,7 +27,7 @@
         android:id="@+id/addLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose"
+        android:text="@string/choose"
         android:layout_marginBottom="15dp"
         app:icon="@drawable/ic_add_24px"
         app:layout_anchor="@id/map"

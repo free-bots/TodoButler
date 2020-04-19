@@ -67,9 +67,9 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                 )
                 setTitle(
                     if (it) {
-                        "PINNED"
+                        getString(R.string.pinned)
                     } else {
-                        "NOT PINNED"
+                        getString(R.string.not_pinned)
                     }
                 )
             }
@@ -221,8 +221,8 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
 
         b_reminder.setOnClickListener {
             AlertDialog.Builder(context)
-                .setMessage("Reminder")
-                .setPositiveButton("Set Date") { _, _ ->
+                .setMessage(getString(R.string.reminder))
+                .setPositiveButton(getString(R.string.set_date)) { _, _ ->
                     DatePickerDialog(
                         context!!,
                         this,
@@ -231,7 +231,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                         calendar.get(Calendar.DAY_OF_MONTH)
                     ).show()
                 }
-                .setNeutralButton("Set Time") { _, _ ->
+                .setNeutralButton(getString(R.string.set_time)) { _, _ ->
                     TimePickerDialog(
                         context!!,
                         this,
@@ -240,7 +240,7 @@ class TaskFragment : Fragment(), TasksAdapter.Action, DatePickerDialog.OnDateSet
                         true
                     ).show()
                 }
-                .setNegativeButton("DELETE") { _, _ ->
+                .setNegativeButton(getString(R.string.delete)) { _, _ ->
                     viewModel.deleteReminder()
                 }
                 .create()
