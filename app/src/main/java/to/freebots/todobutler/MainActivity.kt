@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
 
         println("MAINACTIVITY $taskId")
 
-        // todo navigate to task
         findNavController(R.id.nav_host_fragment).navigate(R.id.taskFragment, Bundle().apply {
             putLong("flatTaskDTO", taskId)
         })

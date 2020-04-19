@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars"
-            android:contentDescription="taskicons" />
+            android:contentDescription="@string/taskicons" />
 
         <CheckBox
             android:id="@+id/cb_completed"

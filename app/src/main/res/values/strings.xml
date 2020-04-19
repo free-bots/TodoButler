@@ -73,4 +73,6 @@
     <string name="files">files</string>
     <string name="open">open</string>
     <string name="share">share</string>
+    <string name="taskicons">taskicons</string>
+    <string name="no_items_icon">no items icon</string>
 </resources>
