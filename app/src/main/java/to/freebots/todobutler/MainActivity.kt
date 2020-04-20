@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         val taskId = intent.getLongExtra(INTENT_TASK_EXTRA, -1)
         navigateToTask(taskId)
 
-        // clean up
-        StorageService(application).nuke()
+//        // clean up
+//        StorageService(application).nuke()
 
     }
 
